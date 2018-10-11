@@ -4,13 +4,11 @@ package ledlib
 #cgo LDFLAGS: -lledlib
 #include "./../../lib/led.h"
 */
-import "C"
+/* ledlib  */
+//import "C"
 import (
-	"fmt"
 	"log"
 	"net"
-	"strconv"
-	"strings"
 )
 
 const LedWidth = 16
@@ -44,16 +42,19 @@ func GetLed() Led {
 
 func newLed() *ledImpl {
 	goImpl := newGoLed()
-	cImpl := newCLed()
-	return &ledImpl{goImpl, cImpl, goImpl, true, false}
+	/* ledlib */
+	//	cImpl := newCLed()
+	//return &ledImpl{goImpl, cImpl, goImpl, true, false}
+	return &ledImpl{goImpl, goImpl, true, false}
 }
 
 /*
 * ledImpl
  */
 type ledImpl struct {
-	goImpl          *ledGoImpl
-	cImpl           *ledCImpl
+	goImpl *ledGoImpl
+	/* ledlib */
+	//	cImpl           *ledCImpl
 	currentImpl     Led
 	enable          bool
 	enableSimulator bool
@@ -85,12 +86,15 @@ func (led *ledImpl) IsEnable() bool {
 }
 
 func (led *ledImpl) EnableSimulator(enable bool) {
-	if enable {
-		led.currentImpl = led.cImpl
-	} else {
-		led.currentImpl = led.goImpl
-	}
-	C.EnableSimulator(C.bool(enable))
+	/* -- ledlib --- */
+	/*
+		if enable {
+			led.currentImpl = led.cImpl
+		} else {
+			led.currentImpl = led.goImpl
+		}
+		C.EnableSimulator(C.bool(enable))
+	*/
 }
 
 /*
@@ -171,7 +175,9 @@ func (led *ledGoImpl) getUrl() string {
 	return led.ledUrl
 }
 
-type ledCImpl struct {
+/* -- ledlib --- */
+/*
+	type ledCImpl struct {
 }
 
 func newCLed() *ledCImpl {
@@ -220,3 +226,4 @@ func (led *ledCImpl) IsEnable() bool {
 func (led *ledCImpl) EnableSimulator(enable bool) {
 	C.EnableSimulator(C.bool(enable))
 }
+*/
