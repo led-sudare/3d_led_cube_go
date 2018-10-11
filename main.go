@@ -25,7 +25,7 @@ type Status struct {
 
 func main() {
 	var (
-		optDestination = flag.String("d", "", "Specify IP and port of Led Cube. if opt is not set, launch simulator.")
+		optDestination = flag.String("d", "localhost:9001", "Specify IP and port of Led Cube. if opt is not set, launch simulator.")
 	)
 	flag.Parse()
 	if *optDestination == "" {
@@ -35,7 +35,7 @@ func main() {
 		ledlib.GetLed().EnableSimulator(false)
 		ledlib.GetLed().SetUrl(*optDestination)
 	}
-	fmt.Println(*optDestination)
+	fmt.Println("udp target: " + *optDestination)
 	go func() {
 		//		fmt.Println(http.ListenAndServe("localhost:6060", nil))
 	}()

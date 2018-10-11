@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"ledlib/util"
 	"time"
 )
 
@@ -48,7 +49,19 @@ func getOrdersFromJson(rawJson string) ([]interface{}, error) {
 	if val, ok := ordersMap.(map[string]interface{}); ok {
 		if val, ok := val["orders"]; ok {
 			if val, ok := val.([]interface{}); ok {
-				return val, nil
+
+				orders := make([]interface{}, 0)
+				for _, v := range val {
+					if order, ok := v.(map[string]interface{}); ok {
+						if _, err := GetJSONValue(order, "color"); err == nil {
+							order = util.ConvertJson(order)
+						}
+
+						orders = append(orders, order)
+					}
+				}
+
+				return orders, nil
 			}
 		}
 	}

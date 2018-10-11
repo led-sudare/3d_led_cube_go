@@ -8,6 +8,7 @@ import (
 )
 
 func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{}, float64, error) {
+
 	value, err := GetJSONValue(order, "id")
 	ilifetime, _ := GetJSONValueOrDefault(order, "lifetime", float64(10.0))
 	if err != nil {
@@ -65,6 +66,4 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 	} else {
 		return nil, 0, fmt.Errorf("Unknown Error: %s", reflect.TypeOf(value))
 	}
-
-	return nil, 0, errors.New("Unnown Error")
 }
