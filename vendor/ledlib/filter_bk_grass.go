@@ -15,17 +15,17 @@ func NewFilterBkGrass(canvas LedCanvas) LedCanvas {
 
 	duration := 100 * time.Millisecond
 	filter.filterObjects.Append(NewObjectScrolledBitmap(
-		util.GetFullPath("./asset/image/grass/grass1.png"), 0, duration))
+		"/asset/image/grass/grass1.png", 0, duration))
 	filter.filterObjects.Append(NewObjectScrolledBitmap(
-		util.GetFullPath("./asset/image/grass/grass2.png"), 1, duration))
+		"/asset/image/grass/grass2.png", 1, duration))
 	filter.filterObjects.Append(NewObjectScrolledBitmap(
-		util.GetFullPath("./asset/image/grass/grass1.png"), 2, duration))
+		"/asset/image/grass/grass1.png", 2, duration))
 	filter.filterObjects.Append(NewObjectScrolledBitmap(
-		util.GetFullPath("./asset/image/grass/grass2.png"), 3, duration))
+		"/asset/image/grass/grass2.png", 3, duration))
 	filter.filterObjects.Append(NewObjectScrolledBitmap(
-		util.GetFullPath("./asset/image/grass/grass1.png"), 4, duration))
+		"/asset/image/grass/grass1.png", 4, duration))
 	filter.filterObjects.Append(NewObjectScrolledBitmap(
-		util.GetFullPath("./asset/image/grass/grass3.png"), 5, duration))
+		"/asset/image/grass/grass3.png", 5, duration))
 
 	return &filter
 }

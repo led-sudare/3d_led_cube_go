@@ -3,7 +3,6 @@ package util
 import (
 	"image/png"
 	"log"
-	"os"
 )
 
 type Image2D interface {
@@ -59,9 +58,9 @@ func (i *Image2DImpl) SetAt(x, y int, c Color32) {
 }
 func (i *Image2DImpl) load(path string) {
 
-	reader, err := os.Open(path)
+	reader, err := Assets.Open(path)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("path: "+path, err)
 	}
 	defer reader.Close()
 	m, err := png.Decode(reader)

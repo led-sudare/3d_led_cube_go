@@ -4,7 +4,6 @@ import (
 	"image/png"
 	"ledlib/util"
 	"log"
-	"os"
 )
 
 type ObjectBitmap struct {
@@ -23,7 +22,7 @@ func (b *ObjectBitmap) load(paths []string) {
 		if path == "" {
 			continue
 		}
-		reader, err := os.Open(path)
+		reader, err := util.Assets.Open(path)
 		if err != nil {
 			log.Fatal(err)
 		}
