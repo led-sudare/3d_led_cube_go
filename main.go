@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"flag"
@@ -10,7 +11,9 @@ import (
 	"log"
 	"net/http"
 	_ "net/http/pprof"
+	"os"
 	"runtime"
+	"strings"
 	"time"
 )
 
@@ -106,7 +109,26 @@ func main() {
 			http.Error(w, "Not implemented.", http.StatusNotFound)
 		}
 	})
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	fmt.Println("led framework is running ...  on port 8081")
+	go func() {
+		log.Fatal(http.ListenAndServe(":8081", nil))
+	}()
+
+	for {
+		sc := bufio.NewScanner(os.Stdin)
+		fmt.Print(">>")
+		if sc.Scan() {
+			input := sc.Text()
+			fmt.Println("input:" + input)
+			switch {
+			case strings.HasPrefix(input, "show"):
+				renderer.Show(strings.Replace(input, "show:", "", 1))
+			case strings.HasPrefix(input, "abort"):
+				renderer.Abort()
+			}
+		}
+	}
+
 	renderer.Terminate()
 
 }

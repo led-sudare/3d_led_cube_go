@@ -15,6 +15,7 @@ export "PATH=$PATH:$GOPATH/bin"
 ## 3. Run "go get"s
 
 ```shell
+$ go get gonum.org/v1/gonum/mat
 $ go get github.com/jessevdk/go-assets-builder
 $ go get github.com/stretchr/testify
 ```
