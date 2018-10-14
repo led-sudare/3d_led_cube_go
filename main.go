@@ -2,12 +2,9 @@ package main
 
 import (
 	"bufio"
-	"bytes"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"ledlib"
-	"ledlib/webapi"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
@@ -19,11 +16,6 @@ import (
 
 func getUnixNano() int64 {
 	return time.Now().UnixNano()
-}
-
-type Status struct {
-	Enable bool   `json:"enable"`
-	Target string `json:"target"`
 }
 
 func main() {
@@ -49,66 +41,9 @@ func main() {
 	renderer := ledlib.NewLedBlockRenderer()
 	renderer.Start()
 
-	// start http server
-	// endpoins are below
-	// POST /api/show       content json
-	// POST /api/abort		no content
-	// POST /api/target     text content
-	//
-	http.HandleFunc("/api/show", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case "POST":
-			bufbody := new(bytes.Buffer)
-			bufbody.ReadFrom(r.Body)
-			fmt.Fprintln(w, bufbody.String())
-			renderer.Show(bufbody.String())
-		default:
-			http.Error(w, "Not implemented.", http.StatusNotFound)
-		}
-	})
-	http.HandleFunc("/api/abort", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case "POST":
-			fmt.Fprintln(w, "abort")
-			renderer.Abort()
-		default:
-			http.Error(w, "Not implemented.", http.StatusNotFound)
-		}
-	})
-	http.HandleFunc("/api/config", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case "POST":
-			bufbody := new(bytes.Buffer)
-			bufbody.ReadFrom(r.Body)
-			config, err := webapi.UnmarshalConfigration(bufbody.Bytes())
-			if err != nil {
-				http.Error(w, "Invalid json body.", http.StatusNotFound)
-			} else {
-				ledlib.GetLed().Enable(config.Enable)
-			}
+	ledlib.SetUpWebAPIforCommon(renderer)
+	ledlib.SetUpWebAPIforPainting(renderer)
 
-		default:
-			http.Error(w, "Not implemented.", http.StatusNotFound)
-		}
-	})
-	http.HandleFunc("/api/hello", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case "GET":
-			fmt.Fprintf(w, "Hello")
-		default:
-			http.Error(w, "Not implemented.", http.StatusNotFound)
-		}
-	})
-	http.HandleFunc("/api/status", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case "GET":
-			status := Status{ledlib.GetLed().IsEnable(), *optDestination}
-			jsoBytes, _ := json.Marshal(status)
-			w.Write(jsoBytes)
-		default:
-			http.Error(w, "Not implemented.", http.StatusNotFound)
-		}
-	})
 	fmt.Println("led framework is running ...  on port 8081")
 	go func() {
 		log.Fatal(http.ListenAndServe(":8081", nil))

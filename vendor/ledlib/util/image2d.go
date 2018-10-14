@@ -7,6 +7,7 @@ import (
 
 type Image2D interface {
 	GetAt(x, y int) Color32
+	SetAt(x, y int, color Color32)
 	GetWidth() int
 	GetHeight() int
 }
@@ -25,8 +26,13 @@ func NewImage2D(path string) Image2D {
 func (i *Image2DImpl) GetAt(x, y int) Color32 {
 	if i.isInRange(x, y) {
 		return i.image[x][y]
-	} else {
-		return NewFromRGB(0, 0, 0)
+	}
+	return nil
+}
+
+func (i *Image2DImpl) SetAt(x, y int, c Color32) {
+	if i.isInRange(x, y) {
+		i.image[x][y] = c
 	}
 }
 
@@ -51,11 +57,7 @@ func (i *Image2DImpl) isInRange(x, y int) bool {
 	}
 	return true
 }
-func (i *Image2DImpl) SetAt(x, y int, c Color32) {
-	if i.isInRange(x, y) {
-		i.image[x][y] = c
-	}
-}
+
 func (i *Image2DImpl) load(path string) {
 
 	reader, err := Assets.Open(path)

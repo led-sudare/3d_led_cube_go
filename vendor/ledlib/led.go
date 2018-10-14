@@ -22,6 +22,7 @@ const ledBulue = 2
 
 type Led interface {
 	SetUrl(url string)
+	GetUrl() string
 	SetLed(x, y, z int, rgb uint32)
 	Clear()
 	Show()
@@ -31,13 +32,13 @@ type Led interface {
 	//	SetPort(port uint16)
 }
 
-var sharedInstance Led
+var sharedLedInstance Led
 
 func GetLed() Led {
-	if sharedInstance == nil {
-		sharedInstance = newLed()
+	if sharedLedInstance == nil {
+		sharedLedInstance = newLed()
 	}
-	return sharedInstance
+	return sharedLedInstance
 }
 
 func newLed() *ledImpl {
@@ -62,6 +63,10 @@ type ledImpl struct {
 
 func (led *ledImpl) SetUrl(url string) {
 	led.currentImpl.SetUrl(url)
+}
+
+func (led *ledImpl) GetUrl() string {
+	return led.currentImpl.GetUrl()
 }
 
 func (led *ledImpl) SetLed(x, y, z int, rgb uint32) {
@@ -116,6 +121,9 @@ func newGoLed() *ledGoImpl {
 
 func (led *ledGoImpl) SetUrl(url string) {
 	led.ledUrl = url
+}
+func (led *ledGoImpl) GetUrl() string {
+	return led.ledUrl
 }
 
 func (led *ledGoImpl) SetLed(x, y, z int, rgb uint32) {

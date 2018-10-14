@@ -1,1 +1,2 @@
 show:{"orders":[{"id":"filter-jump"},{"id":"filter-skewed"},{"id":"object-rocket", "lifetime":3}]}
+show:{"orders":[{"id":"object-painting", "lifetime":0}]}

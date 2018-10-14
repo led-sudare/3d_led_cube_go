@@ -34,11 +34,9 @@ func (l *Image3DImpl) GetAt(x, y, z int) Color32 {
 	if l.isInRange(x, y, z) {
 		if data := l.data.GetAt(x, y, z); data != nil {
 			return data.(Color32)
-		} else {
-			return nil
 		}
 	}
-	return NewFromRGB(0, 0, 0)
+	return nil
 }
 
 func (l *Image3DImpl) Clear() {
