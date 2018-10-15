@@ -70,7 +70,7 @@ func UpdatePartOfPaintingSharedObject(data []byte) error {
 		for _, point := range ledData.Points {
 			d := point.Color
 			if c, err := strconv.ParseUint(d, 16, 32); err == nil {
-				canvas.SetAt(point.X, point.Y, 0, util.NewFromUint32(uint32(c)))
+				canvas.SetAt(point.X, point.Y, 0, util.NewColorFromUint32(uint32(c)))
 			}
 
 		}
@@ -89,7 +89,7 @@ func UpdateAllPaintingSharedObject(data []byte) error {
 			for y := 0; y < LedHeight; y++ {
 				d := ledData.Led[x][y]
 				if c, err := strconv.ParseUint(d, 16, 32); err == nil {
-					canvas.SetAt(x, y, 0, util.NewFromUint32(uint32(c)))
+					canvas.SetAt(x, y, 0, util.NewColorFromUint32(uint32(c)))
 				}
 			}
 		}

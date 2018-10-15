@@ -21,16 +21,16 @@ func (rgb *RGB) IsOff() bool {
 	return rgb.rgb == 0
 }
 
-func NewFromRGB(r, g, b uint8) Color32 {
+func NewColorFromRGB(r, g, b uint8) Color32 {
 	return &RGB{r, g, b, ToUint32(r, g, b)}
 }
 
-func NewFromUint32(c uint32) Color32 {
+func NewColorFromUint32(c uint32) Color32 {
 	r, g, b := ToUint8s(c)
 	return &RGB{r, g, b, c}
 }
 
-func NewFromColorColor(c color.Color) Color32 {
+func NewColorFromColor(c color.Color) Color32 {
 	var r, g, b uint8
 	rr, gg, bb, _ := c.RGBA()
 	r = uint8(rr / 0x100)

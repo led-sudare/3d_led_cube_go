@@ -76,7 +76,7 @@ func (i *Image2DImpl) load(path string) {
 			if m == nil {
 				continue
 			}
-			i.SetAt(x, y, NewFromColorColor(m.At(x, y)))
+			i.SetAt(x, y, NewColorFromColor(m.At(x, y)))
 		}
 	}
 }

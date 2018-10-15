@@ -20,10 +20,6 @@ type FilterExplosion struct {
 	sin       float64
 }
 
-type center struct {
-	x, y, z float64
-}
-
 func NewFilterExplosion(canvas LedCanvas, dimension int) LedCanvas {
 	f := &FilterExplosion{}
 
@@ -49,24 +45,24 @@ func (f *FilterExplosion) getSpeed(x, y, z int) []float64 {
 	return f.speeds.GetAt(x, y, z).([]float64)
 }
 
-func (f *FilterExplosion) getCenter(x, y, z int) *center {
+func (f *FilterExplosion) getCenter(x, y, z int) util.Point {
 	//	ctrl := 1
 	if f.centers.GetAt(x, y, z) == nil {
 		if f.dimension == 3 {
 			f.centers.SetAt(x, y, z,
-				&center{
-					LedWidth/2.0 + rand.Float64()*2 - 1,
-					LedHeight/4.0*3 + rand.Float64()*2 - 1,
-					LedDepth/2.0 + rand.Float64()*2 - 1})
+				util.NewPoint(
+					LedWidth/2.0+rand.Float64()*2-1,
+					LedHeight/4.0*3+rand.Float64()*2-1,
+					LedDepth/2.0+rand.Float64()*2-1))
 		} else {
 			f.centers.SetAt(x, y, z,
-				&center{
-					LedWidth/2.0 + rand.Float64()*2 - 1,
-					LedHeight/4.0*3 + rand.Float64()*2 - 1,
-					rand.Float64()*2 - 2})
+				util.NewPoint(
+					LedWidth/2.0+rand.Float64()*2-1,
+					LedHeight/4.0*3+rand.Float64()*2-1,
+					rand.Float64()*2-2))
 		}
 	}
-	return f.centers.GetAt(x, y, z).(*center)
+	return f.centers.GetAt(x, y, z).(util.Point)
 }
 
 func (f *FilterExplosion) Show(c util.Image3D, param LedCanvasParam) {
@@ -83,17 +79,17 @@ func (f *FilterExplosion) Show(c util.Image3D, param LedCanvasParam) {
 		if f.sin > 0 {
 			for _, speed := range f.getSpeed(x, y, z) {
 				pt := mat.NewDense(3, 1, []float64{
-					float64(x) - cent.x,
-					float64(y) - cent.y,
-					float64(z) - cent.z})
+					float64(x) - cent.X(),
+					float64(y) - cent.Y(),
+					float64(z) - cent.Z()})
 				rate := mat.NewDense(1, 1, []float64{
 					f.sin * 3.5 * speed})
 				var result mat.Dense
 				result.Mul(pt, rate)
 				f.cube.SetAt(
-					util.RoundToInt(result.At(0, 0)+cent.x),
-					util.RoundToInt(result.At(1, 0)+cent.y),
-					util.RoundToInt(result.At(2, 0)+cent.z), c)
+					util.RoundToInt(result.At(0, 0)+cent.X()),
+					util.RoundToInt(result.At(1, 0)+cent.Y()),
+					util.RoundToInt(result.At(2, 0)+cent.Z()), c)
 
 			}
 		} else {

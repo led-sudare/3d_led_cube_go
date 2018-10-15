@@ -34,7 +34,7 @@ func (o *ObjectSnow) Draw(cube util.Image3D) {
 	if o.IsExpired() {
 		return
 	}
-	cube.SetAt(o.x, util.RoundToInt(o.y), o.z, util.NewFromRGB(0xff, 0xff, 0xff))
+	cube.SetAt(o.x, util.RoundToInt(o.y), o.z, util.NewColorFromRGB(0xff, 0xff, 0xff))
 }
 func (o *ObjectSnow) IsExpired() bool {
 	if o.y > LedHeight {

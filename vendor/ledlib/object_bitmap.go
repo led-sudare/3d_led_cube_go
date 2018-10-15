@@ -37,7 +37,7 @@ func (b *ObjectBitmap) load(paths []string) {
 				if m == nil {
 					continue
 				}
-				b.cube.SetAt(x, y, z, util.NewFromColorColor(m.At(x, y)))
+				b.cube.SetAt(x, y, z, util.NewColorFromColor(m.At(x, y)))
 			}
 		}
 	}

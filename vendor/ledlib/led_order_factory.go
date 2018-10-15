@@ -22,7 +22,7 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 				Objects
 			*/
 			case "object-blank":
-				return NewObjectFill(util.NewFromRGB(0, 0, 0)), lifetime, nil
+				return NewObjectFill(util.NewColorFromRGB(0, 0, 0)), lifetime, nil
 			case "object-rocket":
 				return NewObjectRocket(), lifetime, nil
 			case "object-stickman":
@@ -35,9 +35,12 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 				return NewObjectHeart(), lifetime, nil
 			case "object-painting":
 				return NewObjectPainting(), lifetime, nil
-				/*
-					Filters
-				*/
+			case "object-fireworks":
+				return NewObjectFireworks(), lifetime, nil
+
+			/*
+				Filters
+			*/
 			case "filter-rolling":
 				return NewFilterRolling(ledCanvas), 0, nil
 			case "filter-skewed":

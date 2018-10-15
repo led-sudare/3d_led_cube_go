@@ -7,7 +7,7 @@ import (
 )
 
 var waveDepth = 0.8
-var colorWave = util.NewFromRGB(0, 0, 255)
+var colorWave = util.NewColorFromRGB(0, 0, 255)
 var rangeWave = []int{27, 50}
 
 type FilterBkWave struct {
