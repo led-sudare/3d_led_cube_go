@@ -55,6 +55,8 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 				return NewFilterBkGrass(ledCanvas), 0, nil
 			case "filter-bk-wave":
 				return NewFilterBkWave(ledCanvas), 0, nil
+			case "filter-bk-fireworks":
+				return NewFilterBkFireworks(ledCanvas), 0, nil
 			case "filter-explosion":
 				return NewFilterExplosion(ledCanvas, 2), 0, nil
 			case "filter-3d-explosion":

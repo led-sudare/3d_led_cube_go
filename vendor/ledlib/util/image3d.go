@@ -4,6 +4,7 @@ type EnumImage3DCallback func(x, y, z int, c Color32)
 type Image3D interface {
 	SetAt(x, y, z int, c Color32)
 	GetAt(x, y, z int) Color32
+	Copy() Image3D
 	ForEach(callback EnumImage3DCallback)
 	ConcurrentForEach(callback EnumImage3DCallback)
 	ConcurrentForEachAll(callback EnumImage3DCallback)
@@ -37,6 +38,10 @@ func (l *Image3DImpl) GetAt(x, y, z int) Color32 {
 		}
 	}
 	return nil
+}
+
+func (l *Image3DImpl) Copy() Image3D {
+	return &Image3DImpl{l.data.Copy()}
 }
 
 func (l *Image3DImpl) Clear() {

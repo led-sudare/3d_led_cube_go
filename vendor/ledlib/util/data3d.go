@@ -4,6 +4,7 @@ type EnumData3DCallback func(x, y, z int, c interface{})
 type Data3D interface {
 	SetAt(x, y, z int, c interface{})
 	GetAt(x, y, z int) interface{}
+	Copy() Data3D
 	IsInRange(x, y, z int) bool
 	ForEach(callback EnumData3DCallback)
 	ConcurrentForEach(callback EnumData3DCallback)
@@ -63,6 +64,14 @@ func (l *Data3DImpl) GetAt(x, y, z int) interface{} {
 	} else {
 		return nil
 	}
+}
+
+func (l *Data3DImpl) Copy() Data3D {
+	cp := NewData3D(l.X, l.Y, l.Z, l.offsetX, l.offsetY, l.offsetZ)
+	l.ConcurrentForEachAll(func(x, y, z int, c interface{}) {
+		cp.SetAt(x, y, z, l.GetAt(x, y, z))
+	})
+	return cp
 }
 
 func (l *Data3DImpl) Clear() {

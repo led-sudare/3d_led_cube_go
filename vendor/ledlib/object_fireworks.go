@@ -39,7 +39,7 @@ type ObjectFireworks struct {
 	updateTimer *Timer
 }
 
-func NewObjectFireworks() LedObject {
+func localNewObjectFireworks() *ObjectFireworks {
 	obj := ObjectFireworks{}
 	obj.cube = NewLedImage3D()
 	obj.poss = make([]util.PointC, 0)
@@ -51,7 +51,17 @@ func NewObjectFireworks() LedObject {
 	return &obj
 }
 
-func (b *ObjectFireworks) GetImage3D() util.Image3D {
+func NewObjectFireworks() LedObject {
+	return localNewObjectFireworks()
+}
+func NewManagedObjectFireworks() LedManagedObject {
+	return localNewObjectFireworks()
+}
+
+func (b *ObjectFireworks) IsExpired() bool {
+	return false
+}
+func (b *ObjectFireworks) Draw(cube util.Image3D) {
 	if b.addTimer.IsPast() {
 		cx := LedWidth * rand.Float64()
 		cy := LedHeight * rand.Float64()
@@ -64,29 +74,34 @@ func (b *ObjectFireworks) GetImage3D() util.Image3D {
 		}
 	}
 
-	if b.updateTimer.IsPast() {
-		b.cube.Clear()
-		dIdx := make([]int, 0)
+	dIdx := make([]int, 0)
 
-		for i, p := range b.poss {
-			v := b.vs[i]
-			if util.CanShow(p, LedWidth, LedHeight, LedDepth) {
-				b.cube.SetAt(util.RoundToInt(p.X()),
-					util.RoundToInt(p.Y()),
-					util.RoundToInt(p.Z()),
-					p.Color())
-			} else {
-				dIdx = append(dIdx, i)
-			}
+	isPast := b.updateTimer.IsPast()
+
+	for i, p := range b.poss {
+		v := b.vs[i]
+		if util.CanShow(p, LedWidth, LedHeight, LedDepth) {
+			cube.SetAt(util.RoundToInt(p.X()),
+				util.RoundToInt(p.Y()),
+				util.RoundToInt(p.Z()),
+				p.Color())
+		} else {
+			dIdx = append(dIdx, i)
+		}
+		if isPast {
 			p.Add(v)
 			p.SetColor(darken(p.Color()))
 		}
-		for i := len(dIdx) - 1; i >= 0; i-- {
-			b.vs = append(b.vs[:dIdx[i]], b.vs[dIdx[i]+1:]...)
-			b.poss = append(b.poss[:dIdx[i]], b.poss[dIdx[i]+1:]...)
-		}
-
+	}
+	for i := len(dIdx) - 1; i >= 0; i-- {
+		b.vs = append(b.vs[:dIdx[i]], b.vs[dIdx[i]+1:]...)
+		b.poss = append(b.poss[:dIdx[i]], b.poss[dIdx[i]+1:]...)
 	}
 
+}
+
+func (b *ObjectFireworks) GetImage3D() util.Image3D {
+	b.cube.Clear()
+	b.Draw(b.cube)
 	return b.cube
 }
