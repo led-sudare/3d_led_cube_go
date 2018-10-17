@@ -4,6 +4,23 @@
 
 Recomended go version: 1.11
 
+
+### Install Instruction for linux(raspbian)
+
+```shell
+$ wget https://storage.googleapis.com/golang/go1.11.1.linux-armv6l.tar.gz 
+$ sudo tar -C /usr/local -xzf go1.11.1.linux-armv6l.tar.gz
+```
+
+add a below to end of ~/.bash_profile  
+```shell
+export PATH=$PATH:/usr/local/go/bin
+```
+
+
+Referenced from: https://golang.org/doc/install
+
+
 ## 2. Setup Environment Variable
 add belows to end of ~/.bash_profile
 ```shell
