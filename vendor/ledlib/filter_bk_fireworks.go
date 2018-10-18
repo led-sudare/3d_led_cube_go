@@ -8,7 +8,7 @@ import (
 type FilterBkFireworks struct {
 	canvas          LedCanvas
 	objectFireworks LedManagedObject
-	timer           *Timer
+	timer           Timer
 }
 
 func NewFilterBkFireworks(canvas LedCanvas) LedCanvas {

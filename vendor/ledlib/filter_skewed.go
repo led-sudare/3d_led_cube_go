@@ -11,7 +11,7 @@ const T = 20
 type FilterSkewed struct {
 	canvas LedCanvas
 	cube   util.Image3D
-	timer  *Timer
+	timer  Timer
 	yt     float64
 	zt     float64
 	ys     float64

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"ledlib/webapi"
-	"log"
 	"math/rand"
 	"strconv"
 	"sync"
@@ -45,6 +44,14 @@ type audigoOrderData struct {
 	Vol  float64 `json:"vol"`
 }
 
+func NewAudigoOrderData() *audigoOrderData {
+	o := &audigoOrderData{}
+	o.Vol = 1.0
+	o.Loop = false
+	o.Stop = false
+	return o
+}
+
 type audigoOrder struct {
 	ContentID string
 	Function  string
@@ -57,7 +64,7 @@ func NewAudigoOrder(contentID, function string, data *audigoOrderData) *audigoOr
 	o.Function = function
 
 	if data == nil {
-		o.Data = &audigoOrderData{}
+		o.Data = NewAudigoOrderData()
 	} else {
 		o.Data = data
 	}
@@ -69,7 +76,7 @@ func (a *audigoOrder) GetRestUri() string {
 }
 
 func (s *AudigoServiceGatewayImpl) newAudigoPlayOrder(src string, loop bool, stop bool) *audigoOrder {
-	data := &audigoOrderData{}
+	data := NewAudigoOrderData()
 	data.Src = src
 	data.Loop = loop
 	data.Stop = stop
@@ -90,7 +97,7 @@ func (s *AudigoServiceGatewayImpl) newAudigoStopOrder() *audigoOrder {
 }
 
 func (s *AudigoServiceGatewayImpl) newAudigoVolumeOrder(volume float64) *audigoOrder {
-	data := &audigoOrderData{}
+	data := NewAudigoOrderData()
 	data.Vol = volume
 
 	return NewAudigoOrder(s.contentID, funcIDVolume, data)
@@ -119,7 +126,7 @@ func audigoServiceGatewayWorker(url string, c chan *audigoOrder, done chan struc
 			if data, e := json.Marshal(order.Data); e == nil {
 				fmt.Println(string(data))
 				if e := webapi.HttpJsonPost(url+order.GetRestUri(), data); e != nil {
-					log.Fatal(e)
+					fmt.Println(e)
 				}
 			}
 		case funcIDServiceGatewayAbort:

@@ -7,7 +7,7 @@ import (
 )
 
 type ObjectSnow struct {
-	timer   *Timer
+	timer   Timer
 	x       int
 	z       int
 	y       float64
@@ -47,7 +47,7 @@ func (o *ObjectSnow) IsExpired() bool {
 
 type FilterBkSnows struct {
 	filterObjects *FilterObjects
-	timer         *Timer
+	timer         Timer
 }
 
 func NewFilterBkSnows(canvas LedCanvas) LedCanvas {

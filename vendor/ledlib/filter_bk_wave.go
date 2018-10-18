@@ -12,7 +12,7 @@ var rangeWave = []int{27, 50}
 
 type FilterBkWave struct {
 	canvas LedCanvas
-	timer  *Timer
+	timer  Timer
 }
 
 func NewFilterBkWave(canvas LedCanvas) LedCanvas {

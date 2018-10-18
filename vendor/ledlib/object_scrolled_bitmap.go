@@ -6,7 +6,7 @@ import (
 )
 
 type ObjectScrolledBitmap struct {
-	timer  *Timer
+	timer  Timer
 	offset int
 	z      int
 	image  util.Image2D

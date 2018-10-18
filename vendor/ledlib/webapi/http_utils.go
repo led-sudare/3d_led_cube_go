@@ -3,6 +3,7 @@ package webapi
 import (
 	"bytes"
 	"net/http"
+	"time"
 )
 
 func HttpJsonPost(url string, body []byte) error {
@@ -17,7 +18,9 @@ func HttpJsonPost(url string, body []byte) error {
 
 	req.Header.Set("Content-Type", "application/json")
 
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: time.Duration(100 * time.Millisecond),
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		return err

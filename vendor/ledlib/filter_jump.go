@@ -1,6 +1,7 @@
 package ledlib
 
 import (
+	"ledlib/servicegateway"
 	"ledlib/util"
 	"time"
 )
@@ -10,7 +11,7 @@ const UpdateFreq = 0.08
 
 type FilterJump struct {
 	canvas       LedCanvas
-	timer        *Timer
+	timer        Timer
 	cube         util.Image3D
 	currentPower float64
 	initialPower float64
@@ -40,6 +41,7 @@ func (f *FilterJump) Show(c util.Image3D, param LedCanvasParam) {
 		if f.currentPower < -f.initialPower {
 			f.initialPower = getInitialPower()
 			f.currentPower = getInitialPower()
+			servicegateway.GetAudigoSeriveGateway().Play("se_jump.wav", false, false)
 		}
 	}
 	c.ConcurrentForEach(func(x, y, z int, c util.Color32) {

@@ -22,6 +22,7 @@ func getUnixNano() int64 {
 func main() {
 	var (
 		optDestination = flag.String("d", "localhost:9001", "Specify IP and port of Led Cube. if opt is not set, launch simulator.")
+		optIdentifier  = flag.String("i", "", "Identifier for this process. Audio module use this identifier to manage audio.")
 		optAudigo      = flag.String("a", "192.168.0.31", "Specify IP and port of device which Audigo is installed.")
 	)
 	flag.Parse()
@@ -40,7 +41,7 @@ func main() {
 	/*
 	 setup audigo
 	*/
-	servicegateway.InitAudigoSeriveGateway("http://"+"192.168.0.31", *optAudigo)
+	servicegateway.InitAudigoSeriveGateway("http://"+*optAudigo, *optIdentifier)
 
 	/*
 		setup renderer

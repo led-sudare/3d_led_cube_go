@@ -11,7 +11,7 @@ import (
 
 type FilterExplosion struct {
 	canvas    LedCanvas
-	timer     *Timer
+	timer     Timer
 	speeds    util.Data3D
 	centers   util.Data3D
 	cube      util.Image3D

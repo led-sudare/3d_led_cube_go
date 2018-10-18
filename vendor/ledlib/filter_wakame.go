@@ -8,7 +8,7 @@ import (
 
 type FilterWakame struct {
 	canvas LedCanvas
-	timer  *Timer
+	timer  Timer
 	cube   util.Image3D
 }
 

@@ -4,21 +4,28 @@ import (
 	"time"
 )
 
-type Timer struct {
+type Timer interface {
+	ResetTimer()
+	IsPast() bool
+	GetElapsed() time.Duration
+	GetPastCount() uint64
+}
+
+type timerImpl struct {
 	start       time.Time
 	last_update time.Time
 	interval    time.Duration
 }
 
-func NewTimer(interval time.Duration) *Timer {
-	return &Timer{time.Now(), time.Now(), interval}
+func NewTimer(interval time.Duration) Timer {
+	return &timerImpl{time.Now(), time.Now(), interval}
 }
 
-func (t *Timer) ResetTimer() {
+func (t *timerImpl) ResetTimer() {
 	t.last_update = time.Now()
 }
 
-func (t *Timer) IsPast() bool {
+func (t *timerImpl) IsPast() bool {
 	sub := time.Now().Sub(t.last_update)
 	if sub > t.interval {
 		t.ResetTimer()
@@ -27,11 +34,11 @@ func (t *Timer) IsPast() bool {
 	return false
 }
 
-func (t *Timer) GetElapsed() time.Duration {
+func (t *timerImpl) GetElapsed() time.Duration {
 	return time.Now().Sub(t.last_update)
 }
 
-func (t *Timer) GetPastCount() uint64 {
+func (t *timerImpl) GetPastCount() uint64 {
 	sub := time.Now().Sub(t.start)
 	return uint64(sub / t.interval)
 }

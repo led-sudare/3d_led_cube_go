@@ -35,8 +35,8 @@ type ObjectFireworks struct {
 	poss        []util.PointC
 	vs          []util.Point
 	ix          int
-	addTimer    *Timer
-	updateTimer *Timer
+	addTimer    Timer
+	updateTimer Timer
 }
 
 func localNewObjectFireworks() *ObjectFireworks {
