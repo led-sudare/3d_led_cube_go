@@ -3,9 +3,9 @@ package ledlib
 import "ledlib/util"
 
 func ShowObject(canvas LedCanvas, obj LedObject, param LedCanvasParam) {
-	canvas.Show(obj.GetImage3D(), param)
+	canvas.Show(obj.GetImage3D(param), param)
 }
 
 type LedObject interface {
-	GetImage3D() util.Image3D
+	GetImage3D(param LedCanvasParam) util.Image3D
 }

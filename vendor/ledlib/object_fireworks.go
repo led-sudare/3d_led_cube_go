@@ -100,7 +100,7 @@ func (b *ObjectFireworks) Draw(cube util.Image3D) {
 
 }
 
-func (b *ObjectFireworks) GetImage3D() util.Image3D {
+func (b *ObjectFireworks) GetImage3D(param LedCanvasParam) util.Image3D {
 	b.cube.Clear()
 	b.Draw(b.cube)
 	return b.cube

@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"ledlib"
+	"ledlib/servicegateway"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
@@ -21,6 +22,7 @@ func getUnixNano() int64 {
 func main() {
 	var (
 		optDestination = flag.String("d", "localhost:9001", "Specify IP and port of Led Cube. if opt is not set, launch simulator.")
+		optAudigo      = flag.String("a", "192.168.0.31", "Specify IP and port of device which Audigo is installed.")
 	)
 	flag.Parse()
 	if *optDestination == "" {
@@ -34,6 +36,11 @@ func main() {
 	go func() {
 		//		fmt.Println(http.ListenAndServe("localhost:6060", nil))
 	}()
+
+	/*
+	 setup audigo
+	*/
+	servicegateway.InitAudigoSeriveGateway("http://"+"192.168.0.31", *optAudigo)
 
 	/*
 		setup renderer

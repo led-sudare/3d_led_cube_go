@@ -8,12 +8,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestMarshalSoundOrder(t *testing.T) {
-	InitSoundSeriveGateway("tcp://localhost:5751")
-	player := GetSoundSeriveGateway()
-	defer player.Terminate()
+func TestMarshalAudigoOrder(t *testing.T) {
 
-	target := &soundOrder{}
+	target := &audigoOrder{}
 	target.Function = "stop"
 
 	json, err := json.Marshal(target)
@@ -23,10 +20,10 @@ func TestMarshalSoundOrder(t *testing.T) {
 }
 
 func TestPlaySound(t *testing.T) {
-	InitSoundSeriveGateway("tcp://localhost:5751")
-	player := GetSoundSeriveGateway()
+	InitAudigoSeriveGateway("http://localhost:8082", "testtest")
+	player := GetAudigoSeriveGateway()
 	defer player.Terminate()
 
-	player.Play("asset/audio/se_jump.wav", false, false)
+	player.Play("bgm_wave.wav", false, false)
 	time.Sleep(3 * time.Second)
 }
