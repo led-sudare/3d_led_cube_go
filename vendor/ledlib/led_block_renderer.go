@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"ledlib/util"
+	"math"
 	"time"
 )
 
@@ -150,6 +151,7 @@ func (l *ledBockRendererImpl) Start() {
 		isExpired := true
 
 		for {
+			start := time.Now()
 			select {
 			case t := <-l.orderCh:
 				switch t {
@@ -187,6 +189,9 @@ func (l *ledBockRendererImpl) Start() {
 
 				if !isExpired {
 					ShowObject(filters, object, param)
+					duration := time.Now().Sub(start)
+					waittime := math.Max(0, float64(50-duration))
+					time.Sleep(time.Duration(waittime))
 				} else {
 					// idle
 				}

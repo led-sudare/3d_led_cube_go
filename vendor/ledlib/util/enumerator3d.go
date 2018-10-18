@@ -1,8 +1,9 @@
 package util
 
-import "sync"
-
-const usingCore = 2
+import (
+	"runtime"
+	"sync"
+)
 
 type EnumXYZCallback func(x, y, z int)
 
@@ -17,6 +18,7 @@ func EnumXYZ(x, y, z int, callback EnumXYZCallback) {
 }
 func ConcurrentEnumXYZ(x, y, z int, callback EnumXYZCallback) {
 	var wg sync.WaitGroup
+	usingCore := runtime.NumCPU()
 	wg.Add(usingCore)
 	xloop := func(xstart, xend int) {
 		defer wg.Done()
@@ -35,6 +37,30 @@ func ConcurrentEnumXYZ(x, y, z int, callback EnumXYZCallback) {
 			go xloop(c*work, x)
 		} else {
 			go xloop(c*work, (c+1)*work)
+		}
+	}
+	wg.Wait()
+}
+
+type EnumCallback func(i int)
+
+func ConcurrentEnum(start, end int, callback EnumCallback) {
+	var wg sync.WaitGroup
+	usingCore := runtime.NumCPU()
+	wg.Add(usingCore)
+	xloop := func(xstart, xend int) {
+		defer wg.Done()
+		for x := xstart; x < xend; x++ {
+			callback(x)
+		}
+	}
+
+	work := (end - start) / usingCore
+	for c := start; c < usingCore; c++ {
+		if c == usingCore-1 {
+			go xloop(start+c*work, end)
+		} else {
+			go xloop(start+c*work, (c+1)*work)
 		}
 	}
 	wg.Wait()

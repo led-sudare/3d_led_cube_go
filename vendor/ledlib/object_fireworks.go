@@ -3,6 +3,8 @@ package ledlib
 import (
 	"ledlib/util"
 	"math/rand"
+	"sort"
+	"sync"
 	"time"
 )
 
@@ -62,23 +64,27 @@ func (b *ObjectFireworks) IsExpired() bool {
 	return false
 }
 func (b *ObjectFireworks) Draw(cube util.Image3D) {
+	mux := &sync.Mutex{}
 	if b.addTimer.IsPast() {
 		cx := LedWidth * rand.Float64()
 		cy := LedHeight * rand.Float64()
 		cz := LedDepth * rand.Float64()
 
-		for i := 0; i < 1000; i++ {
+		util.ConcurrentEnum(0, 1000, func(i int) {
 			sf := util.GetSphereFace()
+			mux.Lock()
 			b.vs = append(b.vs, sf)
 			b.poss = append(b.poss, util.NewPointC(cx, cy, cz, rgb(sf.Len())))
-		}
+			mux.Unlock()
+		})
 	}
 
 	dIdx := make([]int, 0)
 
 	isPast := b.updateTimer.IsPast()
 
-	for i, p := range b.poss {
+	util.ConcurrentEnum(0, len(b.poss), func(i int) {
+		p := b.poss[i]
 		v := b.vs[i]
 		if util.CanShow(p, LedWidth, LedHeight, LedDepth) {
 			cube.SetAt(util.RoundToInt(p.X()),
@@ -86,14 +92,19 @@ func (b *ObjectFireworks) Draw(cube util.Image3D) {
 				util.RoundToInt(p.Z()),
 				p.Color())
 		} else {
+			mux.Lock()
 			dIdx = append(dIdx, i)
+			mux.Unlock()
 		}
 		if isPast {
 			p.Add(v)
 			p.SetColor(darken(p.Color()))
 		}
+	})
+	if len(dIdx) > 0 {
+		sort.Slice(dIdx, func(lhs, rhs int) bool { return dIdx[lhs] > dIdx[rhs] })
 	}
-	for i := len(dIdx) - 1; i >= 0; i-- {
+	for i := 0; i < len(dIdx); i++ {
 		b.vs = append(b.vs[:dIdx[i]], b.vs[dIdx[i]+1:]...)
 		b.poss = append(b.poss[:dIdx[i]], b.poss[dIdx[i]+1:]...)
 	}
