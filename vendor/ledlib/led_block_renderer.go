@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"ledlib/servicegateway"
 	"ledlib/util"
 	"math"
 	"time"
@@ -154,6 +155,7 @@ func (l *ledBockRendererImpl) Start() {
 			start := time.Now()
 			select {
 			case t := <-l.orderCh:
+				servicegateway.GetAudigoSeriveGateway().Stop()
 				switch t {
 				case "":
 					fmt.Println("terminated")
@@ -181,6 +183,7 @@ func (l *ledBockRendererImpl) Start() {
 					object, filters, lifetime, orders, param, err = GetFilterAndObject(orders, filters, param)
 					if err != nil {
 						isExpired = true
+						servicegateway.GetAudigoSeriveGateway().Stop()
 					} else {
 						isExpired = false
 						startTime = time.Now().Unix()

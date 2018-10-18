@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"ledlib/servicegateway"
 	"ledlib/util"
 	"ledlib/webapi"
 	"net/http"
@@ -55,6 +56,12 @@ func SetUpWebAPIforCommon(renderer LedBlockRenderer) {
 					http.Error(w, "Invalid json body.", http.StatusNotFound)
 				} else {
 					GetLed().Enable(config.Enable)
+					if config.Enable {
+						servicegateway.GetAudigoSeriveGateway().SetVolume(1.0)
+					} else {
+						servicegateway.GetAudigoSeriveGateway().SetVolume(0)
+					}
+
 				}
 
 			default:
