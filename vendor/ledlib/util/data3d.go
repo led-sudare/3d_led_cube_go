@@ -107,3 +107,25 @@ func (l *Data3DImpl) ConcurrentForEachAll(callback EnumData3DCallback) {
 		callback(x, y, z, c)
 	})
 }
+
+type EnumXYZCallback func(x, y, z int)
+
+func EnumXYZ(x, y, z int, callback EnumXYZCallback) {
+	for xx := 0; xx < x; xx++ {
+		for yy := 0; yy < y; yy++ {
+			for zz := 0; zz < z; zz++ {
+				callback(xx, yy, zz)
+			}
+		}
+	}
+}
+func ConcurrentEnumXYZ(x, y, z int, callback EnumXYZCallback) {
+
+	ConcurrentEnum(0, x, func(x int) {
+		for yy := 0; yy < y; yy++ {
+			for zz := 0; zz < z; zz++ {
+				callback(x, yy, zz)
+			}
+		}
+	})
+}
