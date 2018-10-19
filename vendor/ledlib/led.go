@@ -7,6 +7,7 @@ package ledlib
 /* ledlib  */
 //import "C"
 import (
+	"fmt"
 	"log"
 	"net"
 )
@@ -109,11 +110,13 @@ type ledGoImpl struct {
 	ledUrl       string
 	led565Buffer []byte
 	sem          chan struct{}
+	urlToIPmap   map[string]*net.UDPAddr
 }
 
 func newGoLed() *ledGoImpl {
 	led := ledGoImpl{}
 	led.led565Buffer = make([]byte, LedWidth*LedHeight*LedDepth*2)
+	led.urlToIPmap = make(map[string]*net.UDPAddr)
 
 	led.sem = make(chan struct{}, 1)
 	return &led
@@ -156,9 +159,17 @@ func (led *ledGoImpl) Clear() {
 func (led *ledGoImpl) Show() {
 	tcpAddr, err := net.ResolveUDPAddr("udp", led.getUrl())
 	if err != nil {
-		log.Fatalf("error: %s", err.Error())
-		return
+		if lastResolvedAddr, ok := led.urlToIPmap[led.getUrl()]; !ok {
+			log.Fatalf("error: %s", err.Error())
+			return
+		} else {
+			fmt.Println("cannot resolve ip address from hostname. use ip last connect.")
+			tcpAddr = lastResolvedAddr
+		}
+
 	}
+	led.urlToIPmap[led.getUrl()] = tcpAddr
+
 	conn, err := net.DialUDP("udp", nil, tcpAddr)
 	if err != nil {
 		log.Fatalf("error: %s", err.Error())
