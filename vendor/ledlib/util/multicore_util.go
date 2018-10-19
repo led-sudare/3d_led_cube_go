@@ -1,15 +1,20 @@
 package util
 
 import (
+	"math"
 	"runtime"
 	"sync"
 )
 
 type EnumCallback func(i int)
 
+func getGoroutineCount() int {
+	return int(math.Max(1, float64(runtime.NumCPU()-1)))
+}
+
 func ConcurrentEnum(start, end int, callback EnumCallback) {
 	var wg sync.WaitGroup
-	usingCore := runtime.NumCPU()
+	usingCore := getGoroutineCount()
 	wg.Add(usingCore)
 	xloop := func(start, end int) {
 		defer wg.Done()
