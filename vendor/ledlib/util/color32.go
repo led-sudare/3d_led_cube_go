@@ -8,17 +8,17 @@ type Color32 interface {
 }
 
 type RGB struct {
-	r   uint8
-	g   uint8
-	b   uint8
-	rgb uint32
+	R   uint8
+	G   uint8
+	B   uint8
+	Rgb uint32
 }
 
 func (rgb *RGB) Uint32() uint32 {
-	return rgb.rgb
+	return rgb.Rgb
 }
 func (rgb *RGB) IsOff() bool {
-	return rgb.rgb == 0
+	return rgb.Rgb == 0
 }
 
 func NewColorFromRGB(r, g, b uint8) Color32 {

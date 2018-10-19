@@ -17,7 +17,15 @@ type Image2DImpl struct {
 	X, Y  int
 }
 
-func NewImage2D(path string) Image2D {
+func NewImage2D(x, y int) Image2D {
+	image := Image2DImpl{}
+	image.image = MakeImage(x, y)
+	image.X = x
+	image.Y = y
+	return &image
+}
+
+func NewImage2DWithPath(path string) Image2D {
 	image := Image2DImpl{}
 	image.load(path)
 	return &image

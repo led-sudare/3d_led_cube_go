@@ -73,6 +73,8 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 				return NewFilterExplosion(ledCanvas, 3), 0, nil
 			case "filter-wakame":
 				return NewFilterWakame(ledCanvas), 0, nil
+			case "filter-exile":
+				return NewFilterExile(ledCanvas), 0, nil
 
 			default:
 				return nil, 0, errors.New("Unnown Object Id")

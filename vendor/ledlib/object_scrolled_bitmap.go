@@ -15,7 +15,7 @@ type ObjectScrolledBitmap struct {
 func NewObjectScrolledBitmap(path string, z int, updateRate time.Duration) LedManagedObject {
 	obj := ObjectScrolledBitmap{}
 	obj.timer = NewTimer(updateRate)
-	obj.image = util.NewImage2D(path)
+	obj.image = util.NewImage2DWithPath(path)
 	obj.z = z
 	return &obj
 }
