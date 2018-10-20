@@ -3,6 +3,7 @@ package util
 import "image/color"
 
 type Color32 interface {
+	Rgb() *RGB
 	Uint32() uint32
 	IsOff() bool
 }
@@ -11,14 +12,18 @@ type RGB struct {
 	R   uint8
 	G   uint8
 	B   uint8
-	Rgb uint32
+	rgb uint32
+}
+
+func (rgb *RGB) Rgb() *RGB {
+	return rgb
 }
 
 func (rgb *RGB) Uint32() uint32 {
-	return rgb.Rgb
+	return rgb.rgb
 }
 func (rgb *RGB) IsOff() bool {
-	return rgb.Rgb == 0
+	return rgb.rgb == 0
 }
 
 func NewColorFromRGB(r, g, b uint8) Color32 {

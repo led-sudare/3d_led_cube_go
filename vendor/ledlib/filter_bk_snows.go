@@ -52,15 +52,17 @@ type FilterBkSnows struct {
 
 func NewFilterBkSnows(canvas LedCanvas) LedCanvas {
 	filter := FilterBkSnows{}
-	filter.timer = NewTimer(1 * time.Second)
+	filter.timer = NewTimer(800 * time.Millisecond)
 	filter.filterObjects = NewFilterObjects(canvas)
 
 	return &filter
 }
 
 func (f *FilterBkSnows) Show(c util.Image3D, param LedCanvasParam) {
+	cube := c.Copy()
 	if f.timer.IsPast() {
 		f.filterObjects.Append(NewObjectSnow())
+		f.filterObjects.Append(NewObjectSnow())
 	}
-	f.filterObjects.Show(c, param)
+	f.filterObjects.Show(cube, param)
 }

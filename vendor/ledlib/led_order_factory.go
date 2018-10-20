@@ -47,6 +47,8 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 				return NewObjectTree(), lifetime, nil
 			case "object-tulip":
 				return NewObjectTulip(), lifetime, nil
+			case "object-note":
+				return NewObjectNote(), lifetime, nil
 
 			/*
 				Filters
@@ -59,6 +61,8 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 				return NewFilterJump(ledCanvas), 0, nil
 			case "filter-bk-snows":
 				return NewFilterBkSnows(ledCanvas), 0, nil
+			case "filter-bk-rains":
+				return NewFilterBkRains(ledCanvas), 0, nil
 			case "filter-bk-mountain":
 				return NewFilterBkMountain(ledCanvas), 0, nil
 			case "filter-bk-grass":
@@ -75,6 +79,10 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 				return NewFilterWakame(ledCanvas), 0, nil
 			case "filter-exile":
 				return NewFilterExile(ledCanvas), 0, nil
+			case "filter-rainbow":
+				return NewFilterRainbow(ledCanvas), 0, nil
+			case "filter-wave":
+				return NewFilterWave(ledCanvas), 0, nil
 
 			default:
 				return nil, 0, errors.New("Unnown Object Id")
