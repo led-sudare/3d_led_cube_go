@@ -52,9 +52,9 @@ func main() {
 	ledlib.SetUpWebAPIforCommon(renderer)
 	ledlib.SetUpWebAPIforPainting(renderer)
 
-	fmt.Println("led framework is running ...  on port 8081")
+	fmt.Println("led framework is running ...  on port 5001")
 	go func() {
-		log.Fatal(http.ListenAndServe(":8081", nil))
+		log.Fatal(http.ListenAndServe(":5001", nil))
 	}()
 
 	for {
