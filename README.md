@@ -51,16 +51,26 @@ $ cd 3d_led_cube_go
 ```shell
 $ go run main.go
 ```
+or if you want executable file.
+```shell
+$ go build
+$ ./3d_led_cube_go
+```
   
-This command starts LedFramework witch can receive "JSON Orders To Show Content" by HTTP(port 8081).  
+This command starts LedFramework whitch can receive "JSON Orders To Show Content" by HTTP(port 8081).  
 The target to send "Raw Order To Show Content" by UDP is set "localhost:9001" by default.  
-It can be changed by run "go run main.go" with "-d" option.  
+It can be changed by run with "-d" option.  
   
 
 Ex.  
 ```shell
 $ go run main.go -d 192.168.0.xx:9001
 ```
+or
+```shell
+$ ./3d_led_cube_go -d 192.168.0.xx:9001
+```
+
 
 
 # Others
