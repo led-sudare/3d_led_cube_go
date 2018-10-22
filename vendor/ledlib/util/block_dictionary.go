@@ -51,14 +51,14 @@ var order201808MakerFaireTokyo = colorToTable{
 
 // 2018.11&12 Yokohama Gadget Festival, Yahoo Japan Hack Day
 var order201811YgfYhd = colorToTable{
-	"blue":        {2: "object-rocket", 3: "filter-swaying-ctrl", 4: "filter-bk-wave"},
-	"white":       {2: "object-ghost", 3: "filter-rolling-ctrl", 4: "filter-bk-snows"},
-	"green":       {2: "object-saboten", 3: "filter-jump-ctrl", 4: "filter-bk-mountain"},
-	"yellowgreen": {2: "object-yacht", 3: "filter-wakame-ctrl", 4: "filter-bk-grass"},
-	"yellow":      {2: "object-star", 3: "filter-zy-skewed-ctrl", 4: "filter-bk-stars"},
-	"orange":      {2: "object-note", 3: "filter-rainbow-ctrl", 4: "filter-bk-rains"},
-	"brown":       {2: "object-stickman", 3: "filter-zoom-ctrl", 4: "filter-bk-cloud"},
-	"red":         {2: "object-tulip", 3: "filter-3d-explosion-ctrl", 4: "filter-bk-fireworks"},
+	"blue":        {2: "object-rocket", 3: "filter-swaying", 4: "filter-bk-wave"},
+	"white":       {2: "object-ghost", 3: "filter-rolling", 4: "filter-bk-snows"},
+	"green":       {2: "object-saboten", 3: "filter-jump", 4: "filter-bk-mountain"},
+	"yellowgreen": {2: "object-yacht", 3: "filter-wakame", 4: "filter-bk-grass"},
+	"yellow":      {2: "object-star", 3: "filter-zy-skewed", 4: "filter-bk-stars"},
+	"orange":      {2: "object-note", 3: "filter-rainbow", 4: "filter-bk-rains"},
+	"brown":       {2: "object-stickman", 3: "filter-zoom", 4: "filter-bk-cloud"},
+	"red":         {2: "object-tulip", 3: "filter-3d-explosion", 4: "filter-bk-fireworks"},
 }
 
 // this array is used for test to check whether all tables are correct.
