@@ -24,6 +24,7 @@ func main() {
 		optDestination = flag.String("d", "localhost:9001", "Specify IP and port of Led Cube. if opt is not set, launch simulator.")
 		optIdentifier  = flag.String("i", "", "Identifier for this process. Audio module use this identifier to manage audio.")
 		optAudigo      = flag.String("a", "192.168.0.31", "Specify IP and port of device which Audigo is installed.")
+		optCORS        = flag.String("c", "localhost:80", "Specify Client URL whihc CROS allowed.")
 	)
 	flag.Parse()
 	if *optDestination == "" {
@@ -49,8 +50,8 @@ func main() {
 	renderer := ledlib.NewLedBlockRenderer()
 	renderer.Start()
 
-	ledlib.SetUpWebAPIforCommon(renderer)
-	ledlib.SetUpWebAPIforPainting(renderer)
+	ledlib.SetUpWebAPIforCommon(renderer, *optCORS)
+	ledlib.SetUpWebAPIforPainting(renderer, *optCORS)
 
 	fmt.Println("led framework is running ...  on port 5001")
 	go func() {

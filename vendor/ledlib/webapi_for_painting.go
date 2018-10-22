@@ -100,40 +100,48 @@ func UpdateAllPaintingSharedObject(data []byte) error {
 	return errors.New("failed to paint")
 }
 
-func SetUpWebAPIforPainting(renderer LedBlockRenderer) {
+func SetUpWebAPIforPainting(renderer LedBlockRenderer, corsAllowed string) {
 
-	http.HandleFunc("/api/filters", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case "POST":
-			bufbody := new(bytes.Buffer)
-			bufbody.ReadFrom(r.Body)
-			fmt.Fprintln(w, bufbody.String())
+	http.Handle("/api/filters", util.NewCORSHandler(
+		corsAllowed,
+		func(w http.ResponseWriter, r *http.Request) {
+			switch r.Method {
+			case "OPTIONS":
+				return
+			case "POST":
+				bufbody := new(bytes.Buffer)
+				bufbody.ReadFrom(r.Body)
+				fmt.Fprintln(w, bufbody.String())
 
-			// json に変換 filter keyのデータを取得する
-			// filter keyのデータは配列、後ろにPainting objectを追加
-			// orders key に上記配列を追加、文字列化してShow
-			if j, e := MakePaintingOrderWithFilters(bufbody.Bytes()); e == nil {
-				renderer.Show(j)
-			} else {
-				http.Error(w, "Invalid Parameter", http.StatusBadRequest)
+				// json に変換 filter keyのデータを取得する
+				// filter keyのデータは配列、後ろにPainting objectを追加
+				// orders key に上記配列を追加、文字列化してShow
+				if j, e := MakePaintingOrderWithFilters(bufbody.Bytes()); e == nil {
+					renderer.Show(j)
+				} else {
+					http.Error(w, "Invalid Parameter", http.StatusBadRequest)
+				}
+			default:
+				http.Error(w, "Not implemented.", http.StatusNotFound)
 			}
-		default:
-			http.Error(w, "Not implemented.", http.StatusNotFound)
-		}
-	})
-	http.HandleFunc("/api/led", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case "POST":
-			bufbody := new(bytes.Buffer)
-			bufbody.ReadFrom(r.Body)
-			if isPartOfUpdate(bufbody.Bytes()) {
-				UpdatePartOfPaintingSharedObject(bufbody.Bytes())
-			} else {
-				UpdateAllPaintingSharedObject(bufbody.Bytes())
-			}
+		}))
+	http.Handle("/api/led", util.NewCORSHandler(
+		corsAllowed,
+		func(w http.ResponseWriter, r *http.Request) {
+			switch r.Method {
+			case "OPTIONS":
+				return
+			case "POST":
+				bufbody := new(bytes.Buffer)
+				bufbody.ReadFrom(r.Body)
+				if isPartOfUpdate(bufbody.Bytes()) {
+					UpdatePartOfPaintingSharedObject(bufbody.Bytes())
+				} else {
+					UpdateAllPaintingSharedObject(bufbody.Bytes())
+				}
 
-		default:
-			http.Error(w, "Not implemented.", http.StatusNotFound)
-		}
-	})
+			default:
+				http.Error(w, "Not implemented.", http.StatusNotFound)
+			}
+		}))
 }
