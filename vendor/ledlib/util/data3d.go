@@ -1,5 +1,7 @@
 package util
 
+import "sync"
+
 type EnumData3DCallback func(x, y, z int, c interface{})
 type Data3D interface {
 	SetAt(x, y, z int, c interface{})
@@ -17,13 +19,15 @@ type Data3DImpl struct {
 	X, Y, Z                   int
 	offsetX, offsetY, offsetZ int
 	data                      [][][]interface{}
+	mutex                     *sync.Mutex
 }
 
 func NewData3D(x, y, z, offsetX, offsetY, offsetZ int) Data3D {
 	cube := Data3DImpl{
 		x, y, z,
 		offsetX, offsetY, offsetZ,
-		make([][][]interface{}, x)}
+		make([][][]interface{}, x),
+		new(sync.Mutex)}
 
 	for xx := range cube.data {
 		cube.data[xx] = make([][]interface{}, cube.Y)
@@ -75,17 +79,23 @@ func (l *Data3DImpl) Copy() Data3D {
 }
 
 func (l *Data3DImpl) Clear() {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 	ConcurrentEnumXYZ(l.X, l.Y, l.Z, func(x, y, z int) {
 		l.SetAt(x, y, z, nil)
 	})
 }
 func (l *Data3DImpl) Fill(c interface{}) {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 	ConcurrentEnumXYZ(l.X, l.Y, l.Z, func(x, y, z int) {
 		l.SetAt(x, y, z, c)
 	})
 }
 
 func (l *Data3DImpl) ForEach(callback EnumData3DCallback) {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 	EnumXYZ(l.X, l.Y, l.Z, func(x, y, z int) {
 		c := l.GetAt(x, y, z)
 		if c != nil {
@@ -94,6 +104,8 @@ func (l *Data3DImpl) ForEach(callback EnumData3DCallback) {
 	})
 }
 func (l *Data3DImpl) ConcurrentForEach(callback EnumData3DCallback) {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 	ConcurrentEnumXYZ(l.X, l.Y, l.Z, func(x, y, z int) {
 		c := l.GetAt(x, y, z)
 		if c != nil {
@@ -102,6 +114,8 @@ func (l *Data3DImpl) ConcurrentForEach(callback EnumData3DCallback) {
 	})
 }
 func (l *Data3DImpl) ConcurrentForEachAll(callback EnumData3DCallback) {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 	ConcurrentEnumXYZ(l.X, l.Y, l.Z, func(x, y, z int) {
 		c := l.GetAt(x, y, z)
 		callback(x, y, z, c)

@@ -43,6 +43,7 @@ func main() {
 	 setup audigo
 	*/
 	servicegateway.InitAudigoSeriveGateway("http://"+*optAudigo, *optIdentifier)
+	ledlib.InitSeriveGatewayRealsense("tcp://127.0.0.1:5501")
 
 	/*
 		setup renderer

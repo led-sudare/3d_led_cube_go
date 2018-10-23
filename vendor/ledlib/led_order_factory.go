@@ -49,6 +49,8 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 				return NewObjectTulip(), lifetime, nil
 			case "object-note":
 				return NewObjectNote(), lifetime, nil
+			case "object-realsense":
+				return NewObjectRealsense(), lifetime, nil
 
 			/*
 				Filters
