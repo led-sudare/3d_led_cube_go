@@ -25,6 +25,7 @@ func main() {
 		optIdentifier  = flag.String("i", "", "Identifier for this process. Audio module use this identifier to manage audio.")
 		optAudigo      = flag.String("a", "192.168.0.31", "Specify IP and port of device which Audigo is installed.")
 		optRealsense   = flag.String("r", "127.0.0.1:5501", "Specify IP and port of server main_realsense_serivce.py running.")
+		optStarupOrder = flag.String("s", "", "Specify show order which will run when application launch.")
 	)
 	flag.Parse()
 	if *optDestination == "" {
@@ -58,6 +59,11 @@ func main() {
 	go func() {
 		log.Fatal(http.ListenAndServe(":5001", nil))
 	}()
+
+	if *optStarupOrder != "" {
+		fmt.Println("[INFO]default order" + *optStarupOrder)
+		renderer.Show(*optStarupOrder)
+	}
 
 	for {
 		sc := bufio.NewScanner(os.Stdin)
