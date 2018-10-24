@@ -21,11 +21,12 @@ func getUnixNano() int64 {
 
 func main() {
 	var (
-		optDestination = flag.String("d", "localhost:9001", "Specify IP and port of Led Cube. if opt is not set, launch simulator.")
-		optIdentifier  = flag.String("i", "", "Identifier for this process. Audio module use this identifier to manage audio.")
-		optAudigo      = flag.String("a", "192.168.0.31", "Specify IP and port of device which Audigo is installed.")
-		optRealsense   = flag.String("r", "127.0.0.1:5501", "Specify IP and port of server main_realsense_serivce.py running.")
-		optStarupOrder = flag.String("s", "", "Specify show order which will run when application launch.")
+		optDestination   = flag.String("d", "localhost:9001", "Specify IP and port of Led Cube. if opt is not set, launch simulator.")
+		optIdentifier    = flag.String("i", "", "Identifier for this process. Audio module use this identifier to manage audio.")
+		optAudigo        = flag.String("a", "192.168.0.31", "Specify IP and port of device which Audigo is installed.")
+		optRealsense     = flag.String("r", "127.0.0.1:5501", "Specify IP and port of server main_realsense_serivce.py running.")
+		optStarupOrder   = flag.String("s", "", "Specify show order which will run when application launch.")
+		optTestInputMode = flag.Bool("t", false, "Specify flag provide stdin which you can input order.")
 	)
 	flag.Parse()
 	if *optDestination == "" {
@@ -56,30 +57,34 @@ func main() {
 	ledlib.SetUpWebAPIforPainting(renderer)
 
 	fmt.Println("led framework is running ...  on port 5001")
-	go func() {
-		log.Fatal(http.ListenAndServe(":5001", nil))
-	}()
-
 	if *optStarupOrder != "" {
 		fmt.Println("[INFO]default order" + *optStarupOrder)
 		renderer.Show(*optStarupOrder)
 	}
 
-	for {
-		sc := bufio.NewScanner(os.Stdin)
-		fmt.Print(">>")
-		if sc.Scan() {
-			input := sc.Text()
-			fmt.Println("input:" + input)
-			switch {
-			case strings.HasPrefix(input, "show"):
-				renderer.Show(strings.Replace(input, "show:", "", 1))
-			case strings.HasPrefix(input, "abort"):
-				renderer.Abort()
+	runServerCommand := func() {
+		log.Fatal(http.ListenAndServe(":5001", nil))
+	}
+	if *optTestInputMode {
+		go runServerCommand()
+
+		for {
+			sc := bufio.NewScanner(os.Stdin)
+			fmt.Print(">>")
+			if sc.Scan() {
+				input := sc.Text()
+				fmt.Println("input:" + input)
+				switch {
+				case strings.HasPrefix(input, "show"):
+					renderer.Show(strings.Replace(input, "show:", "", 1))
+				case strings.HasPrefix(input, "abort"):
+					renderer.Abort()
+				}
 			}
 		}
+	} else {
+		runServerCommand()
 	}
-
 	renderer.Terminate()
 
 }
