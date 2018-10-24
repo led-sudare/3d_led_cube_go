@@ -100,10 +100,9 @@ func UpdateAllPaintingSharedObject(data []byte) error {
 	return errors.New("failed to paint")
 }
 
-func SetUpWebAPIforPainting(renderer LedBlockRenderer, corsAllowed string) {
+func SetUpWebAPIforPainting(renderer LedBlockRenderer) {
 
 	http.Handle("/api/filters", util.NewCORSHandler(
-		corsAllowed,
 		func(w http.ResponseWriter, r *http.Request) {
 			switch r.Method {
 			case "OPTIONS":
@@ -126,7 +125,6 @@ func SetUpWebAPIforPainting(renderer LedBlockRenderer, corsAllowed string) {
 			}
 		}))
 	http.Handle("/api/led", util.NewCORSHandler(
-		corsAllowed,
 		func(w http.ResponseWriter, r *http.Request) {
 			switch r.Method {
 			case "OPTIONS":

@@ -15,7 +15,7 @@ type Status struct {
 	Target string `json:"target"`
 }
 
-func SetUpWebAPIforCommon(renderer LedBlockRenderer, corsAllowed string) {
+func SetUpWebAPIforCommon(renderer LedBlockRenderer) {
 
 	// start http server
 	// endpoins are below
@@ -24,7 +24,6 @@ func SetUpWebAPIforCommon(renderer LedBlockRenderer, corsAllowed string) {
 	// POST /api/target     text content
 
 	http.Handle("/api/show", util.NewCORSHandler(
-		corsAllowed,
 		func(w http.ResponseWriter, r *http.Request) {
 			switch r.Method {
 			case "POST":
@@ -37,7 +36,6 @@ func SetUpWebAPIforCommon(renderer LedBlockRenderer, corsAllowed string) {
 			}
 		}))
 	http.Handle("/api/abort", util.NewCORSHandler(
-		corsAllowed,
 		func(w http.ResponseWriter, r *http.Request) {
 			switch r.Method {
 			case "POST":
@@ -48,7 +46,6 @@ func SetUpWebAPIforCommon(renderer LedBlockRenderer, corsAllowed string) {
 			}
 		}))
 	http.Handle("/api/config", util.NewCORSHandler(
-		corsAllowed,
 		func(w http.ResponseWriter, r *http.Request) {
 			switch r.Method {
 			case "POST":
@@ -72,7 +69,6 @@ func SetUpWebAPIforCommon(renderer LedBlockRenderer, corsAllowed string) {
 			}
 		}))
 	http.Handle("/api/hello", util.NewCORSHandler(
-		corsAllowed,
 		func(w http.ResponseWriter, r *http.Request) {
 			switch r.Method {
 			case "GET":
@@ -82,7 +78,6 @@ func SetUpWebAPIforCommon(renderer LedBlockRenderer, corsAllowed string) {
 			}
 		}))
 	http.Handle("/api/status", util.NewCORSHandler(
-		corsAllowed,
 		func(w http.ResponseWriter, r *http.Request) {
 			switch r.Method {
 			case "GET":
