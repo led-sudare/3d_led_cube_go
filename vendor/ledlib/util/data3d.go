@@ -13,6 +13,7 @@ type Data3D interface {
 	ConcurrentForEachAll(callback EnumData3DCallback)
 	Clear()
 	Fill(c interface{})
+	EditSafe(editor func(data Data3D))
 }
 
 type Data3DImpl struct {
@@ -63,6 +64,8 @@ func (l *Data3DImpl) SetAt(x, y, z int, c interface{}) {
 }
 
 func (l *Data3DImpl) GetAt(x, y, z int) interface{} {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 	if l.IsInRange(x, y, z) {
 		return l.data[x+l.offsetX][y+l.offsetY][z+l.offsetZ]
 	} else {
@@ -78,24 +81,25 @@ func (l *Data3DImpl) Copy() Data3D {
 	return cp
 }
 
-func (l *Data3DImpl) Clear() {
+func (l *Data3DImpl) EditSafe(editableBlock func(editable Data3D)) {
 	l.mutex.Lock()
 	defer l.mutex.Unlock()
+	editableBlock(l)
+}
+
+func (l *Data3DImpl) Clear() {
 	ConcurrentEnumXYZ(l.X, l.Y, l.Z, func(x, y, z int) {
 		l.SetAt(x, y, z, nil)
 	})
 }
+
 func (l *Data3DImpl) Fill(c interface{}) {
-	l.mutex.Lock()
-	defer l.mutex.Unlock()
 	ConcurrentEnumXYZ(l.X, l.Y, l.Z, func(x, y, z int) {
 		l.SetAt(x, y, z, c)
 	})
 }
 
 func (l *Data3DImpl) ForEach(callback EnumData3DCallback) {
-	l.mutex.Lock()
-	defer l.mutex.Unlock()
 	EnumXYZ(l.X, l.Y, l.Z, func(x, y, z int) {
 		c := l.GetAt(x, y, z)
 		if c != nil {
@@ -104,8 +108,6 @@ func (l *Data3DImpl) ForEach(callback EnumData3DCallback) {
 	})
 }
 func (l *Data3DImpl) ConcurrentForEach(callback EnumData3DCallback) {
-	l.mutex.Lock()
-	defer l.mutex.Unlock()
 	ConcurrentEnumXYZ(l.X, l.Y, l.Z, func(x, y, z int) {
 		c := l.GetAt(x, y, z)
 		if c != nil {
@@ -114,8 +116,6 @@ func (l *Data3DImpl) ConcurrentForEach(callback EnumData3DCallback) {
 	})
 }
 func (l *Data3DImpl) ConcurrentForEachAll(callback EnumData3DCallback) {
-	l.mutex.Lock()
-	defer l.mutex.Unlock()
 	ConcurrentEnumXYZ(l.X, l.Y, l.Z, func(x, y, z int) {
 		c := l.GetAt(x, y, z)
 		callback(x, y, z, c)

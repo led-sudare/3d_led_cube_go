@@ -34,7 +34,7 @@ func getPower(power float64) float64 {
 	return power * power
 }
 
-func (f *FilterJump) Show(c util.Image3D, param LedCanvasParam) {
+func (f *FilterJump) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 	f.cube.Clear()
 	if f.timer.IsPast() {
 		f.currentPower -= Gravity

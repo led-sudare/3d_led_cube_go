@@ -26,6 +26,7 @@ type LedManagedObject interface {
 type FilterObjects struct {
 	canvas  LedCanvas
 	objects []LedManagedObject
+	cube    util.Image3D
 }
 
 func NewFilterObjects(canvas LedCanvas) *FilterObjects {
@@ -33,6 +34,7 @@ func NewFilterObjects(canvas LedCanvas) *FilterObjects {
 	filter := FilterObjects{}
 	filter.canvas = canvas
 	filter.objects = make([]LedManagedObject, 0)
+	filter.cube = NewLedImage3D()
 
 	return &filter
 }
@@ -45,12 +47,15 @@ func (f *FilterObjects) Append(obj LedManagedObject) {
 	f.objects = append(f.objects, obj)
 }
 
-func (f *FilterObjects) Show(cube util.Image3D, param LedCanvasParam) {
+func (f *FilterObjects) Show(cube util.ImmutableImage3D, param LedCanvasParam) {
+
+	f.cube = cube.Copy()
+
 	actives := make([]int, 0, len(f.objects))
 	for i, object := range f.objects {
 		if !object.IsExpired() {
 			actives = append(actives, i)
-			object.Draw(cube)
+			object.Draw(f.cube)
 		}
 	}
 	newobjects := make([]LedManagedObject, len(actives))
@@ -58,5 +63,5 @@ func (f *FilterObjects) Show(cube util.Image3D, param LedCanvasParam) {
 		newobjects[i] = f.objects[target]
 	}
 	f.objects = newobjects
-	f.canvas.Show(cube, param)
+	f.canvas.Show(f.cube, param)
 }

@@ -25,7 +25,7 @@ func NewFilterSkewed(canvas LedCanvas) LedCanvas {
 		0, 0, 0, 0, 0, 0}
 }
 
-func (f *FilterSkewed) Show(c util.Image3D, param LedCanvasParam) {
+func (f *FilterSkewed) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 
 	if f.timer.IsPast() {
 		f.cube.Clear()

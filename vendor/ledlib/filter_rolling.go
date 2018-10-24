@@ -20,7 +20,7 @@ func NewFilterRolling(canvas LedCanvas) LedCanvas {
 	return &FilterRolling{canvas, 0, 0, NewTimer(100 * time.Millisecond), NewLedImage3D()}
 }
 
-func (f *FilterRolling) Show(c util.Image3D, param LedCanvasParam) {
+func (f *FilterRolling) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 	f.cube.Clear()
 	if f.timer.IsPast() {
 		f.add = (f.add + 1)

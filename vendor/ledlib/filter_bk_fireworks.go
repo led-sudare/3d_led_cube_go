@@ -20,7 +20,7 @@ func NewFilterBkFireworks(canvas LedCanvas) LedCanvas {
 	return &filter
 }
 
-func (f *FilterBkFireworks) Show(c util.Image3D, param LedCanvasParam) {
+func (f *FilterBkFireworks) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 	filtered := c.Copy()
 	f.objectFireworks.Draw(filtered)
 	f.canvas.Show(filtered, param)

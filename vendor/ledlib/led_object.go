@@ -7,5 +7,5 @@ func ShowObject(canvas LedCanvas, obj LedObject, param LedCanvasParam) {
 }
 
 type LedObject interface {
-	GetImage3D(param LedCanvasParam) util.Image3D
+	GetImage3D(param LedCanvasParam) util.ImmutableImage3D
 }

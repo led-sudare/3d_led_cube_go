@@ -58,7 +58,7 @@ func NewFilterBkSnows(canvas LedCanvas) LedCanvas {
 	return &filter
 }
 
-func (f *FilterBkSnows) Show(c util.Image3D, param LedCanvasParam) {
+func (f *FilterBkSnows) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 	cube := c.Copy()
 	if f.timer.IsPast() {
 		f.filterObjects.Append(NewObjectSnow())

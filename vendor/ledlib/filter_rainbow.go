@@ -14,17 +14,21 @@ const (
 type FilterRainbow struct {
 	canvas LedCanvas
 	timer  Timer
+	cube   util.Image3D
 }
 
 func NewFilterRainbow(canvas LedCanvas) LedCanvas {
 	f := FilterRainbow{}
 	f.canvas = canvas
 	f.timer = NewTimer(10 * time.Millisecond)
+	f.cube = NewLedImage3D()
 	servicegateway.GetAudigoSeriveGateway().Play("se_rainbow.wav", true, false)
 	return &f
 }
 
-func (f *FilterRainbow) Show(c util.Image3D, param LedCanvasParam) {
+func (f *FilterRainbow) Show(c util.ImmutableImage3D, param LedCanvasParam) {
+
+	f.cube = c.Copy()
 
 	p := float64(f.timer.GetPastCount()) / 10.0
 	c.ConcurrentForEach(func(x, y, z int, color util.Color32) {
@@ -34,8 +38,8 @@ func (f *FilterRainbow) Show(c util.Image3D, param LedCanvasParam) {
 
 		hsv := &util.HSV{h, 1, 1}
 
-		c.SetAt(x, y, z, hsv.RGB())
+		f.cube.SetAt(x, y, z, hsv.RGB())
 
 	})
-	f.canvas.Show(c, param)
+	f.canvas.Show(f.cube, param)
 }

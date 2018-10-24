@@ -26,7 +26,7 @@ func NewFilterBkMountain(canvas LedCanvas) LedCanvas {
 	return &filter
 }
 
-func (f *FilterBkMountain) Show(c util.Image3D, param LedCanvasParam) {
+func (f *FilterBkMountain) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 	if param.HasEffect("filter-snows") {
 		f.filterObjectsSnow.Show(c, param)
 	} else {

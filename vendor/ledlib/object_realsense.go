@@ -14,7 +14,7 @@ func NewObjectRealsense() LedObject {
 	return &obj
 }
 
-func (b *ObjectRealsense) GetImage3D(param LedCanvasParam) util.Image3D {
+func (b *ObjectRealsense) GetImage3D(param LedCanvasParam) util.ImmutableImage3D {
 	b.cube = GetSharedLedImage3D(realsenseSharedObjectID).Copy()
 	return b.cube
 }

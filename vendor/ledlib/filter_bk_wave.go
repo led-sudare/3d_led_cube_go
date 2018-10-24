@@ -13,6 +13,7 @@ var rangeWave = []int{27, 50}
 type FilterBkWave struct {
 	canvas LedCanvas
 	timer  Timer
+	cube   util.Image3D
 }
 
 func NewFilterBkWave(canvas LedCanvas) LedCanvas {
@@ -20,10 +21,14 @@ func NewFilterBkWave(canvas LedCanvas) LedCanvas {
 
 	f.canvas = canvas
 	f.timer = NewTimer(10 * time.Millisecond)
+	f.cube = NewLedImage3D()
 	return f
 }
 
-func (f *FilterBkWave) Show(cube util.Image3D, param LedCanvasParam) {
+func (f *FilterBkWave) Show(cube util.ImmutableImage3D, param LedCanvasParam) {
+
+	f.cube = cube.Copy()
+
 	zWaveLength := float64(2.0 * math.Pi)
 	zWaveDepth := float64(waveDepth)
 	zDot := zWaveLength / LedDepth
@@ -39,8 +44,8 @@ func (f *FilterBkWave) Show(cube util.Image3D, param LedCanvasParam) {
 			y0 := y + util.RoundToInt(
 				(xWaveDepth+math.Sin(xDot*float64(x)+xStart)*xWaveDepth)+
 					(zWaveDepth+math.Sin(zDot*float64(z)+zStart)+zWaveDepth))
-			cube.SetAt(x, y0, z, colorWave)
+			f.cube.SetAt(x, y0, z, colorWave)
 		}
 	})
-	f.canvas.Show(cube, param)
+	f.canvas.Show(f.cube, param)
 }

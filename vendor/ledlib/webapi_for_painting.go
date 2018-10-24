@@ -64,16 +64,19 @@ func isPartOfUpdate(data []byte) bool {
 func UpdatePartOfPaintingSharedObject(data []byte) error {
 
 	var ledData LedPartOfPaintingData
-	canvas := GetSharedLedImage3D(paintingSharedObjectID)
 	if err := json.Unmarshal(data, &ledData); err == nil {
 
-		for _, point := range ledData.Points {
-			d := point.Color
-			if c, err := strconv.ParseUint(d, 16, 32); err == nil {
-				canvas.SetAt(point.X, point.Y, 0, util.NewColorFromUint32(uint32(c)))
-			}
+		EditSharedLedImage3D(paintingSharedObjectID,
+			func(editable util.Image3D) {
 
-		}
+				for _, point := range ledData.Points {
+					d := point.Color
+					if c, err := strconv.ParseUint(d, 16, 32); err == nil {
+						editable.SetAt(point.X, point.Y, 0, util.NewColorFromUint32(uint32(c)))
+					}
+
+				}
+			})
 		return nil
 	} else {
 		return err
@@ -83,16 +86,18 @@ func UpdatePartOfPaintingSharedObject(data []byte) error {
 
 func UpdateAllPaintingSharedObject(data []byte) error {
 	var ledData LedAllPaintingData
-	canvas := GetSharedLedImage3D(paintingSharedObjectID)
 	if err := json.Unmarshal(data, &ledData); err == nil {
-		for x := 0; x < LedWidth; x++ {
-			for y := 0; y < LedHeight; y++ {
-				d := ledData.Led[x][y]
-				if c, err := strconv.ParseUint(d, 16, 32); err == nil {
-					canvas.SetAt(x, y, 0, util.NewColorFromUint32(uint32(c)))
+		EditSharedLedImage3D(paintingSharedObjectID,
+			func(editable util.Image3D) {
+				for x := 0; x < LedWidth; x++ {
+					for y := 0; y < LedHeight; y++ {
+						d := ledData.Led[x][y]
+						if c, err := strconv.ParseUint(d, 16, 32); err == nil {
+							editable.SetAt(x, y, 0, util.NewColorFromUint32(uint32(c)))
+						}
+					}
 				}
-			}
-		}
+			})
 		return nil
 	} else {
 		return err

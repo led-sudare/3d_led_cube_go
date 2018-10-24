@@ -20,7 +20,7 @@ func NewFilterWakame(canvas LedCanvas) LedCanvas {
 	return &f
 }
 
-func (f *FilterWakame) Show(c util.Image3D, param LedCanvasParam) {
+func (f *FilterWakame) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 	f.cube.Clear()
 
 	yWaveLength := float64(3.0 * math.Pi)

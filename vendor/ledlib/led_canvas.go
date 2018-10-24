@@ -30,7 +30,7 @@ func (l *LedCanvasParamImpl) HasEffect(effect string) bool {
 }
 
 type LedCanvas interface {
-	Show(c util.Image3D, param LedCanvasParam)
+	Show(c util.ImmutableImage3D, param LedCanvasParam)
 }
 
 /**
@@ -39,7 +39,7 @@ DummyLedCanvas for test
 type DummyLedCanvas struct {
 }
 
-func (canvas *DummyLedCanvas) Show(c util.Image3D, param LedCanvasParam) {
+func (canvas *DummyLedCanvas) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 }
 
 type LedCanvasImpl struct {
@@ -49,7 +49,7 @@ func NewLedCanvas() *LedCanvasImpl {
 	return &LedCanvasImpl{}
 }
 
-func (canvas *LedCanvasImpl) Show(c util.Image3D, param LedCanvasParam) {
+func (canvas *LedCanvasImpl) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 	util.ConcurrentEnumXYZ(LedWidth, LedHeight, LedDepth, func(x, y, z int) {
 		px := c.GetAt(x, y, z)
 		if px != nil && !px.IsOff() {

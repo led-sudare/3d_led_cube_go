@@ -6,18 +6,27 @@ import (
 
 type SharedLedImage3D interface {
 	GetImage(id string) util.Image3D
-	ClearImage(id string)
+	EditImage(id string, editableBlock func(editable util.Image3D))
+	RemoveSharedImage(id string)
 }
 
 var sharedLedImage3D SharedLedImage3D
 
-func GetSharedLedImage3D(id string) util.Image3D {
+func GetSharedLedImage3D(id string) util.ImmutableImage3D {
 	return getSharedLedImage3DInstance().GetImage(id)
 }
 
-func ClearSharedLedImage3D(id string) {
-	getSharedLedImage3DInstance().ClearImage(id)
+func RemoveSharedLedImage3D(id string) {
+	getSharedLedImage3DInstance().RemoveSharedImage(id)
 }
+
+func EditSharedLedImage3D(id string, editableBlock func(editable util.Image3D)) {
+	getSharedLedImage3DInstance().EditImage(id, editableBlock)
+}
+
+/**
+private
+*/
 
 func getSharedLedImage3DInstance() SharedLedImage3D {
 	if sharedLedImage3D == nil {
@@ -43,6 +52,12 @@ func (o *sharedLedImage3DImpl) GetImage(id string) util.Image3D {
 	}
 }
 
-func (o *sharedLedImage3DImpl) ClearImage(id string) {
+func (o *sharedLedImage3DImpl) RemoveSharedImage(id string) {
 	delete(o.images, id)
+}
+
+func (o *sharedLedImage3DImpl) EditImage(id string, editableBlock func(editable util.Image3D)) {
+	o.GetImage(id).EditSafe(func(editable util.Image3D) {
+		editableBlock(editable)
+	})
 }

@@ -47,7 +47,7 @@ func NewObjectTree() LedObject {
 	return &bmp
 }
 
-func (b *ObjectTree) GetImage3D(param LedCanvasParam) util.Image3D {
+func (b *ObjectTree) GetImage3D(param LedCanvasParam) util.ImmutableImage3D {
 	switch {
 	case param.HasEffect("filter-snow"):
 		return b.winter

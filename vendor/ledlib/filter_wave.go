@@ -22,7 +22,7 @@ func NewFilterWave(canvas LedCanvas) LedCanvas {
 	return &f
 }
 
-func (f *FilterWave) Show(c util.Image3D, param LedCanvasParam) {
+func (f *FilterWave) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 
 	f.cube.Clear()
 	offset := float64(f.timer.GetPastCount()) / 200

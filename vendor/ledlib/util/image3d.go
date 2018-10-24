@@ -1,15 +1,21 @@
 package util
 
 type EnumImage3DCallback func(x, y, z int, c Color32)
-type Image3D interface {
-	SetAt(x, y, z int, c Color32)
+
+type ImmutableImage3D interface {
 	GetAt(x, y, z int) Color32
 	Copy() Image3D
 	ForEach(callback EnumImage3DCallback)
 	ConcurrentForEach(callback EnumImage3DCallback)
 	ConcurrentForEachAll(callback EnumImage3DCallback)
+}
+
+type Image3D interface {
+	ImmutableImage3D
+	SetAt(x, y, z int, c Color32)
 	Clear()
 	Fill(c Color32)
+	EditSafe(editableBlock func(editable Image3D))
 }
 
 type Image3DImpl struct {
@@ -49,6 +55,12 @@ func (l *Image3DImpl) Clear() {
 }
 func (l *Image3DImpl) Fill(c Color32) {
 	l.data.Fill(c)
+}
+
+func (l *Image3DImpl) EditSafe(editableBlock func(editable Image3D)) {
+	l.data.EditSafe(func(editable Data3D) {
+		editableBlock(&Image3DImpl{editable})
+	})
 }
 
 func (l *Image3DImpl) ForEach(callback EnumImage3DCallback) {

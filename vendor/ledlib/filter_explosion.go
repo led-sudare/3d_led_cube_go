@@ -65,7 +65,7 @@ func (f *FilterExplosion) getCenter(x, y, z int) util.Point {
 	return f.centers.GetAt(x, y, z).(util.Point)
 }
 
-func (f *FilterExplosion) Show(c util.Image3D, param LedCanvasParam) {
+func (f *FilterExplosion) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 	f.cube.Clear()
 	if f.timer.IsPast() {
 		p1 := 0.5

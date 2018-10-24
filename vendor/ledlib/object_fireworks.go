@@ -47,7 +47,7 @@ func localNewObjectFireworks() *ObjectFireworks {
 	obj.poss = make([]util.PointC, 0)
 	obj.vs = make([]util.Point, 0)
 	obj.ix = 0
-	obj.addTimer = NewTimer(1100 * time.Millisecond)
+	obj.addTimer = NewTimer(1800 * time.Millisecond)
 	obj.updateTimer = NewTimer(80 * time.Millisecond)
 
 	return &obj
@@ -111,7 +111,7 @@ func (b *ObjectFireworks) Draw(cube util.Image3D) {
 
 }
 
-func (b *ObjectFireworks) GetImage3D(param LedCanvasParam) util.Image3D {
+func (b *ObjectFireworks) GetImage3D(param LedCanvasParam) util.ImmutableImage3D {
 	b.cube.Clear()
 	b.Draw(b.cube)
 	return b.cube

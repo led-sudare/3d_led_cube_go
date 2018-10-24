@@ -14,6 +14,6 @@ func NewObjectFill(c util.Color32) LedObject {
 	return &obj
 }
 
-func (b *ObjectFill) GetImage3D(param LedCanvasParam) util.Image3D {
+func (b *ObjectFill) GetImage3D(param LedCanvasParam) util.ImmutableImage3D {
 	return b.cube
 }

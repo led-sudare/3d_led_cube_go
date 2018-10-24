@@ -28,7 +28,7 @@ func NewObjectGhost() LedObject {
 	return &bmp
 }
 
-func (b *ObjectGhost) GetImage3D(param LedCanvasParam) util.Image3D {
+func (b *ObjectGhost) GetImage3D(param LedCanvasParam) util.ImmutableImage3D {
 	if b.timer.IsPast() {
 		servicegateway.GetAudigoSeriveGateway().Play("se_obake2.wav", false, false)
 	}

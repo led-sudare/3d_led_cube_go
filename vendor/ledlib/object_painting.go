@@ -5,7 +5,7 @@ import (
 )
 
 type ObjectPainting struct {
-	cube util.Image3D
+	cube util.ImmutableImage3D
 }
 
 func NewObjectPainting() LedObject {
@@ -13,6 +13,6 @@ func NewObjectPainting() LedObject {
 	return &obj
 }
 
-func (b *ObjectPainting) GetImage3D(param LedCanvasParam) util.Image3D {
+func (b *ObjectPainting) GetImage3D(param LedCanvasParam) util.ImmutableImage3D {
 	return b.cube
 }

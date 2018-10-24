@@ -22,7 +22,7 @@ func NewFilterExile(canvas LedCanvas) LedCanvas {
 	return &f
 }
 
-func (f *FilterExile) Show(c util.Image3D, param LedCanvasParam) {
+func (f *FilterExile) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 	f.cube.Clear()
 	speed := 15.0
 	buffer := util.NewImage2D(LedWidth, LedHeight)

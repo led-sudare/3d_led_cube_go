@@ -30,6 +30,6 @@ func NewFilterBkGrass(canvas LedCanvas) LedCanvas {
 	return &filter
 }
 
-func (f *FilterBkGrass) Show(c util.Image3D, param LedCanvasParam) {
+func (f *FilterBkGrass) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 	f.filterObjects.Show(c, param)
 }

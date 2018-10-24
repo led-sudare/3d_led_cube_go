@@ -14,6 +14,6 @@ func NewObjectBitmap(paths []string) LedObject {
 	return &bmp
 }
 
-func (b *ObjectBitmap) GetImage3D(param LedCanvasParam) util.Image3D {
+func (b *ObjectBitmap) GetImage3D(param LedCanvasParam) util.ImmutableImage3D {
 	return b.cube
 }
