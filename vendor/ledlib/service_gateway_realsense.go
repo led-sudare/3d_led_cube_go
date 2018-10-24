@@ -1,3 +1,5 @@
+// +build realsense
+
 package ledlib
 
 import (

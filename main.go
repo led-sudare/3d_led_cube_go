@@ -24,6 +24,7 @@ func main() {
 		optDestination = flag.String("d", "localhost:9001", "Specify IP and port of Led Cube. if opt is not set, launch simulator.")
 		optIdentifier  = flag.String("i", "", "Identifier for this process. Audio module use this identifier to manage audio.")
 		optAudigo      = flag.String("a", "192.168.0.31", "Specify IP and port of device which Audigo is installed.")
+		optRealsense   = flag.String("r", "127.0.0.1:5501", "Specify IP and port of server main_realsense_serivce.py running.")
 	)
 	flag.Parse()
 	if *optDestination == "" {
@@ -42,7 +43,7 @@ func main() {
 	 setup audigo
 	*/
 	servicegateway.InitAudigoSeriveGateway("http://"+*optAudigo, *optIdentifier)
-	ledlib.InitSeriveGatewayRealsense("tcp://127.0.0.1:5501")
+	ledlib.InitSeriveGatewayRealsense("tcp://" + *optRealsense)
 
 	/*
 		setup renderer
