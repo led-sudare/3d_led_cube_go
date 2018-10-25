@@ -137,70 +137,99 @@ func (l *ledBockRendererImpl) Show(blocks string) {
 	l.orderCh <- blocks
 }
 
-func (l *ledBockRendererImpl) Start() {
+func (l *ledBockRendererImpl) getOrdersFromString(t string) []interface{} {
+	if arrayOrders, err := getOrdersFromJson(t); err != nil {
+		return nil
+	} else if flattenOrders, err := flattenOrders(arrayOrders); err != nil {
+		return nil
+	} else {
+		return flattenOrders
+	}
+}
 
+func (l *ledBockRendererImpl) waitOrdersFromChanel() ([]interface{}, error) {
+	// === get orders ===>
+	t, ok := <-l.orderCh
+
+	if !ok {
+		return nil, errors.New("termination command recevied")
+	}
+	return l.getOrdersFromString(t), nil
+}
+
+func (l *ledBockRendererImpl) getOrdersFromChanel() ([]interface{}, error) {
+
+	select {
+	case t, ok := <-l.orderCh:
+		if !ok {
+			return nil, errors.New("termination command recevied")
+		}
+		return l.getOrdersFromString(t), nil
+	default:
+		return nil, nil
+	}
+}
+
+func (l *ledBockRendererImpl) Start() {
 	go func() {
 		defer func() { close(l.doneCh) }()
 
-		baseCanvas := NewLedCanvas()
-		var object LedObject
-		var filters LedCanvas
-		var orders []interface{}
-		var lifetime float64
-		var startTime int64
-		param := NewLedCanvasParam()
-		isExpired := true
-
 		for {
-			start := time.Now()
-			select {
-			case t := <-l.orderCh:
-				servicegateway.GetAudigoSeriveGateway().Stop()
-				switch t {
-				case "":
+			var filters LedCanvas = NewLedCanvas()
+			param := NewLedCanvasParam()
+			var lifetime float64 = 1
+			var expiresDate int64
+
+			orders, err := l.waitOrdersFromChanel()
+			if err != nil {
+				fmt.Println("terminated")
+				return
+			}
+			if orders == nil {
+				// order error
+				continue
+			}
+
+			var object LedObject
+			for {
+				start := time.Now()
+				newOrders, err := l.getOrdersFromChanel()
+				if err != nil {
 					fmt.Println("terminated")
 					return
-				default:
-					fmt.Println(t)
-					if arrayOrders, err := getOrdersFromJson(t); err != nil {
-						//error
-					} else if flattenOrders, err := flattenOrders(arrayOrders); err != nil {
-						//error
-					} else {
-						object, filters, lifetime, orders, param, err = GetFilterAndObject(flattenOrders, baseCanvas, param)
-						if err != nil {
-							isExpired = true
-						} else {
-							isExpired = false
-							startTime = time.Now().Unix()
-						}
-					}
 				}
-			default:
+				if newOrders != nil {
+					servicegateway.GetAudigoSeriveGateway().Stop()
+					filters = NewLedCanvas()
+					param = NewLedCanvasParam()
+					orders = newOrders
+					lifetime = 1
+					expiresDate = 0
+				}
+
+				// update filters
 				if lifetime != 0 &&
-					(time.Now().Unix()-startTime) > int64(lifetime) {
-					var err error
+					time.Now().Unix() > expiresDate { // if lifetime expired
 					object, filters, lifetime, orders, param, err = GetFilterAndObject(orders, filters, param)
 					if err != nil {
-						isExpired = true
 						servicegateway.GetAudigoSeriveGateway().Stop()
+						break
 					} else {
-						isExpired = false
-						startTime = time.Now().Unix()
+						expiresDate = time.Now().Unix() + int64(lifetime)
 					}
 				}
 
-				if !isExpired {
-					ShowObject(filters, object, param)
-					duration := time.Now().Sub(start)
-					waittime := math.Max(0, float64(50-duration))
-					time.Sleep(time.Duration(waittime))
-				} else {
-					// idle
-				}
+				ShowObject(filters, object, param)
+				duration := time.Now().Sub(start)
+				waittime := math.Max(0, float64(50-duration))
+				time.Sleep(time.Duration(waittime))
+
 			}
+
 		}
+
 	}()
+
 }
 
 func GetFilterAndObject(iOrders []interface{}, canvas LedCanvas, param LedCanvasParam) (LedObject, LedCanvas, float64, []interface{}, LedCanvasParam, error) {
