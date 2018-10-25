@@ -23,7 +23,7 @@ func main() {
 	var (
 		optDestination   = flag.String("d", "localhost:9001", "Specify IP and port of Led Cube. if opt is not set, launch simulator.")
 		optIdentifier    = flag.String("i", "", "Identifier for this process. Audio module use this identifier to manage audio.")
-		optAudigo        = flag.String("a", "192.168.0.31", "Specify IP and port of device which Audigo is installed.")
+		optAudigo        = flag.String("a", "audigo.local", "Specify IP and port of device which Audigo is installed.")
 		optRealsense     = flag.String("r", "127.0.0.1:5501", "Specify IP and port of server main_realsense_serivce.py running.")
 		optStarupOrder   = flag.String("s", "", "Specify show order which will run when application launch.")
 		optTestInputMode = flag.Bool("t", false, "Specify flag provide stdin which you can input order.")
