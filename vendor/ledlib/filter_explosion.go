@@ -1,6 +1,7 @@
 package ledlib
 
 import (
+	"ledlib/servicegateway"
 	"ledlib/util"
 	"math"
 	"math/rand"
@@ -18,6 +19,15 @@ type FilterExplosion struct {
 	dimension int
 	t         float64
 	sin       float64
+	preSign   int
+}
+
+func getSign(value float64) int {
+	if value >= 0 {
+		return 1
+	} else {
+		return -1
+	}
 }
 
 func NewFilterExplosion(canvas LedCanvas, dimension int) LedCanvas {
@@ -28,6 +38,7 @@ func NewFilterExplosion(canvas LedCanvas, dimension int) LedCanvas {
 	f.speeds = NewLedData3D()
 	f.centers = NewLedData3D()
 	f.cube = NewLedImage3D()
+	f.preSign = -1
 
 	f.dimension = dimension
 	rand.Seed(time.Now().UnixNano())
@@ -71,7 +82,12 @@ func (f *FilterExplosion) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 		p1 := 0.5
 		f.t += 0.01 + p1*0.28
 		f.sin = math.Sin(f.t)
+		sign := getSign(f.sin)
 
+		if f.preSign < 0 && sign > 0 {
+			servicegateway.GetAudigoSeriveGateway().Play("se_explosion.wav", true, false)
+		}
+		f.preSign = sign
 		//		f.add = (f.add + 1)
 	}
 	c.ConcurrentForEach(func(x, y, z int, c util.Color32) {

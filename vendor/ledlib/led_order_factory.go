@@ -83,6 +83,8 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 				return NewFilterExile(ledCanvas), 0, nil
 			case "filter-rainbow":
 				return NewFilterRainbow(ledCanvas), 0, nil
+			case "filter-swaying":
+				return NewFilterSwaying(ledCanvas), 0, nil
 			case "filter-wave":
 				return NewFilterWave(ledCanvas), 0, nil
 

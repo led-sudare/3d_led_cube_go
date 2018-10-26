@@ -6,7 +6,8 @@ import (
 )
 
 type FilterBkGrass struct {
-	filterObjects *FilterObjects
+	filterObjects     *FilterObjects
+	filterObjectsSnow *FilterObjects
 }
 
 func NewFilterBkGrass(canvas LedCanvas) LedCanvas {
@@ -27,9 +28,26 @@ func NewFilterBkGrass(canvas LedCanvas) LedCanvas {
 	filter.filterObjects.Append(NewObjectScrolledBitmap(
 		"/asset/image/grass/grass3.png", 5, duration))
 
+	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
+		"/asset/image/grass/grass1-s.png", 0, duration))
+	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
+		"/asset/image/grass/grass2-s.png", 1, duration))
+	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
+		"/asset/image/grass/grass1-s.png", 2, duration))
+	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
+		"/asset/image/grass/grass2-s.png", 3, duration))
+	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
+		"/asset/image/grass/grass1-s.png", 4, duration))
+	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
+		"/asset/image/grass/grass3-s.png", 5, duration))
+
 	return &filter
 }
 
 func (f *FilterBkGrass) Show(c util.ImmutableImage3D, param LedCanvasParam) {
-	f.filterObjects.Show(c, param)
+	if param.HasEffect("filter-snows") {
+		f.filterObjectsSnow.Show(c, param)
+	} else {
+		f.filterObjects.Show(c, param)
+	}
 }

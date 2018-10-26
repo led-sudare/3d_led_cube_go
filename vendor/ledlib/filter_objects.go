@@ -52,12 +52,14 @@ func (f *FilterObjects) Show(cube util.ImmutableImage3D, param LedCanvasParam) {
 	f.cube = cube.Copy()
 
 	actives := make([]int, 0, len(f.objects))
-	for i, object := range f.objects {
-		if !object.IsExpired() {
+
+	util.ConcurrentEnum(0, len(f.objects), func(i int) {
+		if !f.objects[i].IsExpired() {
 			actives = append(actives, i)
-			object.Draw(f.cube)
+			f.objects[i].Draw(f.cube)
 		}
-	}
+	})
+
 	newobjects := make([]LedManagedObject, len(actives))
 	for i, target := range actives {
 		newobjects[i] = f.objects[target]

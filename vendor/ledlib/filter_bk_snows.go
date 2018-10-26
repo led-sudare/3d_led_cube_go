@@ -1,6 +1,7 @@
 package ledlib
 
 import (
+	"ledlib/servicegateway"
 	"ledlib/util"
 	"math/rand"
 	"time"
@@ -54,6 +55,8 @@ func NewFilterBkSnows(canvas LedCanvas) LedCanvas {
 	filter := FilterBkSnows{}
 	filter.timer = NewTimer(800 * time.Millisecond)
 	filter.filterObjects = NewFilterObjects(canvas)
+
+	servicegateway.GetAudigoSeriveGateway().Play("se_rain.wav", true, false)
 
 	return &filter
 }
