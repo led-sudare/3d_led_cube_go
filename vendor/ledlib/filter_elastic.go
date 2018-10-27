@@ -39,6 +39,7 @@ func (f *FilterElastic) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 		yy := (float64(y)-dy)*zoom2 + dy
 		zz := (float64(z)-dz)*zoom1 + dz
 
+		f.cube.SetAt(int(xx), int(yy), int(zz), c)
 		f.cube.SetAt(util.RoundToInt(xx), util.RoundToInt(yy), util.RoundToInt(zz), c)
 	})
 
