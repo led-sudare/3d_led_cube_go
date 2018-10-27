@@ -16,30 +16,30 @@ func NewFilterBkGrass(canvas LedCanvas) LedCanvas {
 
 	duration := 100 * time.Millisecond
 	filter.filterObjects.Append(NewObjectScrolledBitmap(
-		"/asset/image/grass/grass1.png", 0, duration))
+		"/asset/image/grass/grass1.png", 0, duration, true))
 	filter.filterObjects.Append(NewObjectScrolledBitmap(
-		"/asset/image/grass/grass2.png", 1, duration))
+		"/asset/image/grass/grass2.png", 1, duration, true))
 	filter.filterObjects.Append(NewObjectScrolledBitmap(
-		"/asset/image/grass/grass1.png", 2, duration))
+		"/asset/image/grass/grass1.png", 2, duration, true))
 	filter.filterObjects.Append(NewObjectScrolledBitmap(
-		"/asset/image/grass/grass2.png", 3, duration))
+		"/asset/image/grass/grass2.png", 3, duration, true))
 	filter.filterObjects.Append(NewObjectScrolledBitmap(
-		"/asset/image/grass/grass1.png", 4, duration))
+		"/asset/image/grass/grass1.png", 4, duration, true))
 	filter.filterObjects.Append(NewObjectScrolledBitmap(
-		"/asset/image/grass/grass3.png", 5, duration))
+		"/asset/image/grass/grass3.png", 5, duration, true))
 
 	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
-		"/asset/image/grass/grass1-s.png", 0, duration))
+		"/asset/image/grass/grass1-s.png", 0, duration, true))
 	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
-		"/asset/image/grass/grass2-s.png", 1, duration))
+		"/asset/image/grass/grass2-s.png", 1, duration, true))
 	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
-		"/asset/image/grass/grass1-s.png", 2, duration))
+		"/asset/image/grass/grass1-s.png", 2, duration, true))
 	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
-		"/asset/image/grass/grass2-s.png", 3, duration))
+		"/asset/image/grass/grass2-s.png", 3, duration, true))
 	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
-		"/asset/image/grass/grass1-s.png", 4, duration))
+		"/asset/image/grass/grass1-s.png", 4, duration, true))
 	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
-		"/asset/image/grass/grass3-s.png", 5, duration))
+		"/asset/image/grass/grass3-s.png", 5, duration, true))
 
 	return &filter
 }

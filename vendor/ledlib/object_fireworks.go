@@ -20,13 +20,6 @@ func red(ix int) uint8 {
 	}
 }
 
-func darken(c util.Color32) util.Color32 {
-	r := ((c.Uint32() & 0xff0000) * 49 / 50) & 0xff0000
-	g := ((c.Uint32() & 0xff00) * 49 / 50) & 0xff
-	b := ((c.Uint32() & 0xff) * 49 / 50) & 0xff
-	return util.NewColorFromUint32(uint32(r + g + b))
-}
-
 func rgb(ix float64) util.Color32 {
 	n := util.FloorToInt(ix * 1 * 90)
 	return util.NewColorFromRGB(red(n), red(n+30), red(n+60))
@@ -47,7 +40,7 @@ func localNewObjectFireworks() *ObjectFireworks {
 	obj.poss = make([]util.PointC, 0)
 	obj.vs = make([]util.Point, 0)
 	obj.ix = 0
-	obj.addTimer = NewTimer(1800 * time.Millisecond)
+	obj.addTimer = NewTimer(2500 * time.Millisecond)
 	obj.updateTimer = NewTimer(80 * time.Millisecond)
 
 	return &obj
@@ -98,7 +91,7 @@ func (b *ObjectFireworks) Draw(cube util.Image3D) {
 		}
 		if isPast {
 			p.Add(v)
-			p.SetColor(darken(p.Color()))
+			p.SetColor(util.Darken(p.Color()))
 		}
 	})
 	if len(dIdx) > 0 {

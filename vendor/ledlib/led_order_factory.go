@@ -55,6 +55,8 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 			/*
 				Filters
 			*/
+			case "filter-bk-cloud":
+				return NewFilterBkClouds(ledCanvas), 0, nil
 			case "filter-rolling":
 				return NewFilterRolling(ledCanvas), 0, nil
 			case "filter-skewed":
@@ -63,6 +65,8 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 				return NewFilterJump(ledCanvas), 0, nil
 			case "filter-bk-snows":
 				return NewFilterBkSnows(ledCanvas), 0, nil
+			case "filter-bk-stars":
+				return NewFilterBkStars(ledCanvas), 0, nil
 			case "filter-bk-rains":
 				return NewFilterBkRains(ledCanvas), 0, nil
 			case "filter-bk-mountain":
@@ -87,6 +91,8 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 				return NewFilterSwaying(ledCanvas), 0, nil
 			case "filter-wave":
 				return NewFilterWave(ledCanvas), 0, nil
+			case "filter-elastic":
+				return NewFilterElastic(ledCanvas), 0, nil
 
 			default:
 				return nil, 0, errors.New("Unnown Object Id")

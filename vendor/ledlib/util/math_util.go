@@ -16,3 +16,11 @@ func MaxInt(x, y int) int {
 	}
 	return y
 }
+
+func GetSign(value float64) int {
+	if value >= 0 {
+		return 1
+	} else {
+		return -1
+	}
+}

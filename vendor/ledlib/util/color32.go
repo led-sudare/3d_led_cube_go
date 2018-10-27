@@ -22,6 +22,7 @@ func (rgb *RGB) Rgb() *RGB {
 func (rgb *RGB) Uint32() uint32 {
 	return rgb.rgb
 }
+
 func (rgb *RGB) IsOff() bool {
 	return rgb.rgb == 0
 }
@@ -50,4 +51,15 @@ func ToUint32(r, g, b uint8) uint32 {
 
 func ToUint8s(c uint32) (uint8, uint8, uint8) {
 	return uint8(c >> 16 & 0xff), uint8(c >> 8 & 0xff), uint8(c & 0xff)
+}
+
+func Darken(c Color32) Color32 {
+	return DarkenWithRatio(c, 98)
+}
+
+func DarkenWithRatio(c Color32, ratio uint32) Color32 {
+	r := ((c.Uint32() & 0xff0000) * ratio / 100) & 0xff0000
+	g := ((c.Uint32() & 0xff00) * ratio / 100) & 0xff
+	b := ((c.Uint32() & 0xff) * ratio / 100) & 0xff
+	return NewColorFromUint32(uint32(r + g + b))
 }
