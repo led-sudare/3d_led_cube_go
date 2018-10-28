@@ -25,8 +25,8 @@ func ConcurrentEnum(start, end int, callback EnumCallback) {
 
 	work := (end - start) / usingCore
 	for c := start; c < usingCore; c++ {
-		if c == usingCore-1 {
-			go xloop(start+c*work, end)
+		if c == usingCore-1 { // Last
+			xloop(start+c*work, end)
 		} else {
 			go xloop(start+c*work, (c+1)*work)
 		}
