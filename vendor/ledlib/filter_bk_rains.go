@@ -13,35 +13,33 @@ type ObjectRain struct {
 	z       int
 	y       float64
 	gravity float64
+	colors  []util.Color32
 }
 
-func NewObjectRain() LedManagedObject {
+func NewObjectRain(colors []util.Color32) LedManagedObject {
 	rain := ObjectRain{}
-	rand.Seed(time.Now().UnixNano())
-	rain.timer = NewTimer(15 * time.Millisecond)
+	rain.timer = NewTimer(50 * time.Millisecond)
 	rain.x = rand.Intn(LedWidth)
 	rain.z = rand.Intn(LedDepth)
 	rain.y = 0
-	rain.gravity = (rand.Float64() / 5) + 0.3
+	rain.colors = colors
 
 	return &rain
 }
 
 func (o *ObjectRain) Draw(cube util.Image3D) {
-	if o.timer.IsPast() {
-		o.y = o.y + o.gravity
-	}
+	o.y = o.y*0.8 + float64(o.timer.GetPastCount())/6
 
 	if o.IsExpired() {
 		return
 	}
-	for i := 0; i < 5; i++ {
-		hsv := &util.HSV{0.6, 1, 1 / (float64(i + 1))}
-		cube.SetAt(o.x, util.RoundToInt(o.y)-i, o.z, hsv.RGB())
+	for i, color := range o.colors {
+		cube.SetAt(o.x, util.RoundToInt(o.y)-i, o.z, color)
 	}
 }
+
 func (o *ObjectRain) IsExpired() bool {
-	if o.y > LedHeight {
+	if int(o.y) > LedHeight+len(o.colors) {
 		return true
 	}
 	return false
@@ -52,12 +50,20 @@ func (o *ObjectRain) IsExpired() bool {
 type FilterBkRains struct {
 	filterObjects *FilterObjects
 	timer         Timer
+	colors        []util.Color32
 }
 
 func NewFilterBkRains(canvas LedCanvas) LedCanvas {
+	rand.Seed(time.Now().UnixNano())
 	filter := FilterBkRains{}
 	filter.timer = NewTimer(400 * time.Millisecond)
 	filter.filterObjects = NewFilterObjects(canvas)
+
+	filter.colors = make([]util.Color32, 5)
+	for i, _ := range filter.colors {
+		hsv := &util.HSV{0.6, 1, 1 / (float64(i + 1))}
+		filter.colors[i] = hsv.RGB()
+	}
 
 	servicegateway.GetAudigoSeriveGateway().Play("se_rain.wav", true, false)
 
@@ -66,9 +72,9 @@ func NewFilterBkRains(canvas LedCanvas) LedCanvas {
 
 func (f *FilterBkRains) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 	cube := c.Copy()
-	if f.timer.IsPast() {
-		f.filterObjects.Append(NewObjectRain())
-		f.filterObjects.Append(NewObjectRain())
+	if f.timer.IsPast() && f.filterObjects.Len() < 8 {
+		f.filterObjects.Append(NewObjectRain(f.colors))
+		//		f.filterObjects.Append(NewObjectRain())
 	}
 	f.filterObjects.Show(cube, param)
 }
