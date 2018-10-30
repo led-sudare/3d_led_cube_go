@@ -27,17 +27,14 @@ func (f *FilterBkStars) addTwinkleStars() {
 	f.filterObjects.Append(createTwinkleStar())
 	f.filterObjects.Append(createTwinkleStar())
 	f.filterObjects.Append(createTwinkleStar())
-	f.filterObjects.Append(createTwinkleStar())
-	f.filterObjects.Append(createTwinkleStar())
-	f.filterObjects.Append(createTwinkleStar())
 	f.filterObjects.Append(createShootingStar())
 }
 
 func createTwinkleStar() LedManagedObject {
 
-	x, y, z := rand.Intn(LedWidth-1), rand.Intn(LedHeight-1)/2, rand.Intn(LedDepth-1)
+	x, y, z := rand.Intn(LedWidth-4)+2, (rand.Intn(LedHeight-4)+2)/2, rand.Intn(LedDepth-4)+2
 	size := 1
-	return NewObjectTwinkleStar(x, y, z, size, 2800*time.Millisecond)
+	return NewObjectTwinkleStar(x, y, z, size)
 }
 func createShootingStar() LedManagedObject {
 
@@ -48,7 +45,7 @@ func createShootingStar() LedManagedObject {
 
 func (f *FilterBkStars) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 
-	if f.timer.IsPast() {
+	if f.filterObjects.Len() == 0 {
 		f.addTwinkleStars()
 	}
 

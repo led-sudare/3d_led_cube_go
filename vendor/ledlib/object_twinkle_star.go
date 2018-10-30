@@ -8,20 +8,18 @@ import (
 
 type ObjectTwinkleStar struct {
 	x, y, z, size int
-	timeout       time.Duration
-	bornAt        time.Time
 	straitOffsets [][]int
 	tiltOffsets   [][]int
 	twinkleSpeed  float64
 	first0        bool
 	timer         Timer
+	twinkleCount  int
+	preSign       int
 }
 
-func NewObjectTwinkleStar(x, y, z, size int, timeout time.Duration) LedManagedObject {
+func NewObjectTwinkleStar(x, y, z, size int) LedManagedObject {
 	obj := ObjectTwinkleStar{}
 	obj.x, obj.y, obj.z, obj.size = x, y, z, size
-	obj.bornAt = time.Now()
-	obj.timeout = timeout
 
 	obj.straitOffsets = make([][]int, 6)
 	obj.straitOffsets[0] = []int{-1, 0, 0}
@@ -45,6 +43,7 @@ func NewObjectTwinkleStar(x, y, z, size int, timeout time.Duration) LedManagedOb
 	obj.timer = NewTimer(20 * time.Millisecond)
 	//	obj.twinkleSpeed = rand.Float64() / 10
 	obj.twinkleSpeed = 0.05
+	obj.twinkleCount = 0
 
 	return &obj
 }
@@ -60,16 +59,17 @@ func (o *ObjectTwinkleStar) Draw(cube util.Image3D) {
 			return
 		}
 	}
+	o.drawStar(cube, math.Abs(width), o.straitOffsets)
+
 	sign := util.GetSign(width)
-	if sign < 0 {
-		o.drawStar(cube, -width, o.straitOffsets)
-	} else {
-		o.drawStar(cube, width, o.straitOffsets)
+	if o.preSign != sign {
+		o.twinkleCount++
 	}
+	o.preSign = sign
 }
 
 func (o *ObjectTwinkleStar) IsExpired() bool {
-	return time.Now().Sub(o.bornAt) > o.timeout
+	return o.twinkleCount > 3
 }
 
 func (o *ObjectTwinkleStar) drawStar(cube util.Image3D, width float64, offsets [][]int) {
@@ -86,7 +86,6 @@ func (o *ObjectTwinkleStar) drawStar(cube util.Image3D, width float64, offsets [
 				o.x+offsetX*i,
 				o.y+offsetY*i,
 				o.z+offsetZ*i,
-				//				util.DarkenWithRatio(o.starColor, 100-uint32(i)*30))
 				hsv.RGB())
 		}
 	}

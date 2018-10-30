@@ -221,7 +221,14 @@ func (l *ledBockRendererImpl) Start() {
 
 				ShowObject(filters, object, param)
 				duration := time.Now().Sub(start)
-				waittime := math.Max(0, float64(50-duration))
+				waittime := math.Max(0, float64(50*time.Millisecond-duration))
+
+				/*
+					fmt.Printf("rendering: %0.2f, wait: %0.2f\n",
+						float64(duration)/float64(time.Millisecond),
+						float64(waittime)/float64(time.Millisecond))
+				*/
+
 				time.Sleep(time.Duration(waittime))
 
 			}

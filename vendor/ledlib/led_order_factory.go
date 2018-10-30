@@ -56,7 +56,7 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 				Filters
 			*/
 			case "filter-bk-cloud":
-				return NewFilterBkClouds(ledCanvas), 0, nil
+				return NewFilterBkCloudsLow(ledCanvas), 0, nil
 			case "filter-rolling":
 				return NewFilterRolling(ledCanvas), 0, nil
 			case "filter-skewed":
@@ -64,7 +64,7 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 			case "filter-jump":
 				return NewFilterJump(ledCanvas), 0, nil
 			case "filter-bk-snows":
-				return NewFilterBkSnows(ledCanvas), 0, nil
+				return NewFilterBkSnowsLow(ledCanvas), 0, nil
 			case "filter-bk-stars":
 				return NewFilterBkStars(ledCanvas), 0, nil
 			case "filter-bk-rains":

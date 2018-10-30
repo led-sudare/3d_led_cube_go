@@ -1,6 +1,9 @@
 package ledlib
 
-import "ledlib/util"
+import (
+	"ledlib/util"
+	"sync"
+)
 
 /*
 	LedObjectとそのlifetimeを管理する
@@ -27,6 +30,7 @@ type FilterObjects struct {
 	canvas  LedCanvas
 	objects []LedManagedObject
 	cube    util.Image3D
+	mutex   *sync.Mutex
 }
 
 func NewFilterObjects(canvas LedCanvas) *FilterObjects {
@@ -35,6 +39,7 @@ func NewFilterObjects(canvas LedCanvas) *FilterObjects {
 	filter.canvas = canvas
 	filter.objects = make([]LedManagedObject, 0)
 	filter.cube = NewLedImage3D()
+	filter.mutex = &sync.Mutex{}
 
 	return &filter
 }
@@ -47,6 +52,9 @@ func (f *FilterObjects) Append(obj LedManagedObject) {
 	f.objects = append(f.objects, obj)
 }
 
+func (f *FilterObjects) ConcurrentShow(cube util.ImmutableImage3D, param LedCanvasParam) {
+}
+
 func (f *FilterObjects) Show(cube util.ImmutableImage3D, param LedCanvasParam) {
 
 	f.cube = cube.Copy()
@@ -55,7 +63,9 @@ func (f *FilterObjects) Show(cube util.ImmutableImage3D, param LedCanvasParam) {
 
 	util.ConcurrentEnum(0, len(f.objects), func(i int) {
 		if !f.objects[i].IsExpired() {
+			f.mutex.Lock()
 			actives = append(actives, i)
+			f.mutex.Unlock()
 			f.objects[i].Draw(f.cube)
 		}
 	})
