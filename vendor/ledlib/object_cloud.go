@@ -12,17 +12,17 @@ type ObjectCloud struct {
 func NewObjectCloud(z int, updateRate time.Duration) LedManagedObject {
 	obj := ObjectCloud{}
 	obj.cloud = []LedManagedObject{
-		NewObjectScrolledBitmap(
+		NewObjectHorizontalScrolledBitmap(
 			"/asset/image/cloud/cloud2.png", z, updateRate, false),
-		NewObjectScrolledBitmap(
+		NewObjectHorizontalScrolledBitmap(
 			"/asset/image/cloud/cloud3.png", z+1, updateRate, false),
-		NewObjectScrolledBitmap(
+		NewObjectHorizontalScrolledBitmap(
 			"/asset/image/cloud/cloud4.png", z+2, updateRate, false),
-		NewObjectScrolledBitmap(
+		NewObjectHorizontalScrolledBitmap(
 			"/asset/image/cloud/cloud4.png", z+3, updateRate, false),
-		NewObjectScrolledBitmap(
+		NewObjectHorizontalScrolledBitmap(
 			"/asset/image/cloud/cloud3.png", z+4, updateRate, false),
-		NewObjectScrolledBitmap(
+		NewObjectHorizontalScrolledBitmap(
 			"/asset/image/cloud/cloud2.png", z+5, updateRate, false),
 	}
 	return &obj

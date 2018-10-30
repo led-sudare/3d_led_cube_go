@@ -13,14 +13,14 @@ type FilterBkMountain struct {
 func NewFilterBkMountain(canvas LedCanvas) LedCanvas {
 	filter := FilterBkMountain{}
 	filter.filterObjects = NewFilterObjects(canvas)
-	filter.filterObjects.Append(NewObjectScrolledBitmap(
+	filter.filterObjects.Append(NewObjectHorizontalScrolledBitmap(
 		"/asset/image/mountain/mountain2.png", 6, 300*time.Millisecond, true))
-	filter.filterObjects.Append(NewObjectScrolledBitmap(
+	filter.filterObjects.Append(NewObjectHorizontalScrolledBitmap(
 		"/asset/image/mountain/mountain1.png", 7, 300*time.Millisecond, true))
 	filter.filterObjectsSnow = NewFilterObjects(canvas)
-	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
+	filter.filterObjectsSnow.Append(NewObjectHorizontalScrolledBitmap(
 		"/asset/image/mountain/mountain2-s.png", 6, 300*time.Millisecond, true))
-	filter.filterObjectsSnow.Append(NewObjectScrolledBitmap(
+	filter.filterObjectsSnow.Append(NewObjectHorizontalScrolledBitmap(
 		"/asset/image/mountain/mountain1-s.png", 7, 300*time.Millisecond, true))
 
 	return &filter
