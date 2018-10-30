@@ -58,7 +58,7 @@ func (b *ObjectFireworks) IsExpired() bool {
 }
 func (b *ObjectFireworks) Draw(cube util.Image3D) {
 	mux := &sync.Mutex{}
-	if b.addTimer.IsPast() {
+	if len(b.poss) < 250 {
 		cx := LedWidth * rand.Float64()
 		cy := LedHeight * rand.Float64()
 		cz := LedDepth * rand.Float64()
