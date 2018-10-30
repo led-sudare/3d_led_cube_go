@@ -58,7 +58,7 @@ func main() {
 
 	fmt.Println("led framework is running ...  on port 5001")
 	if *optStarupOrder != "" {
-		fmt.Println("[INFO]default order" + *optStarupOrder)
+		fmt.Println("[INFO]default order: " + *optStarupOrder)
 		renderer.Show(*optStarupOrder)
 	}
 
