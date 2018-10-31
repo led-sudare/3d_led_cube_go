@@ -51,14 +51,14 @@ var order201808MakerFaireTokyo = colorToTable{
 
 // 2018.11&12 Yokohama Gadget Festival, Yahoo Japan Hack Day
 var order201811YgfYhd = colorToTable{
-	"blue":        {2: "object-rocket", 3: "filter-swaying", 4: "filter-bk-wave"},
-	"white":       {2: "object-ghost", 3: "filter-rolling", 4: "filter-bk-snows"},
-	"green":       {2: "object-saboten", 3: "filter-jump", 4: "filter-bk-mountain"},
+	"blue":        {2: "object-ghost", 3: "filter-swaying", 4: "filter-bk-wave"},
+	"white":       {2: "object-snowman", 3: "filter-rolling", 4: "filter-bk-snows"},
+	"green":       {2: "object-tree", 3: "filter-jump", 4: "filter-bk-mountain"},
 	"yellowgreen": {2: "object-yacht", 3: "filter-wakame", 4: "filter-bk-grass"},
-	"yellow":      {2: "object-star", 3: "filter-zy-skewed", 4: "filter-bk-stars"},
+	"yellow":      {2: "object-star", 3: "filter-skewed", 4: "filter-bk-stars"},
 	"orange":      {2: "object-note", 3: "filter-rainbow", 4: "filter-bk-rains"},
-	"brown":       {2: "object-stickman", 3: "filter-zoom", 4: "filter-bk-cloud"},
-	"red":         {2: "object-tulip", 3: "filter-3d-explosion", 4: "filter-bk-fireworks"},
+	"brown":       {2: "object-stickman", 3: "filter-elastic", 4: "filter-bk-cloud"},
+	"red":         {2: "object-rocket", 3: "filter-3d-explosion", 4: "filter-bk-fireworks"},
 }
 
 // this array is used for test to check whether all tables are correct.
@@ -94,7 +94,7 @@ func convertJsonWidhTable(order map[string]interface{}, table colorToTable) (map
 
 func ConvertJson(order map[string]interface{}) map[string]interface{} {
 	if result, err := convertJsonWidhTable(order, orderDefault); err != nil {
-		order["id"] = "filter-jump-ctrl"
+		order["id"] = "filter-jump"
 		return order
 	} else {
 		return result

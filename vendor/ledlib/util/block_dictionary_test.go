@@ -18,7 +18,7 @@ func TestConvertJsonAllTable(t *testing.T) {
 		"brown",
 		"red",
 	}
-	widths := []int{
+	widths := []float64{
 		2, 3, 4,
 	}
 	for _, table := range orderAll {
