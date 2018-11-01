@@ -7,7 +7,6 @@ package ledlib
 /* ledlib  */
 //import "C"
 import (
-	"fmt"
 	"log"
 	"net"
 )
@@ -131,15 +130,15 @@ func (led *ledGoImpl) GetUrl() string {
 
 func (led *ledGoImpl) SetLed(x, y, z int, rgb uint32) {
 	if x < 0 || LedWidth <= x {
-		log.Fatalf("invalid x : %d\n", x)
+		log.Printf("invalid x : %d\n", x)
 		return
 	}
 	if y < 0 || LedHeight <= y {
-		log.Fatalf("invalid y : %d\n", y)
+		log.Printf("invalid y : %d\n", y)
 		return
 	}
 	if z < 0 || LedDepth <= z {
-		log.Fatalf("invalid z : %d\n", z)
+		log.FaPrintftalf("invalid z : %d\n", z)
 		return
 	}
 
@@ -160,10 +159,10 @@ func (led *ledGoImpl) Show() {
 	tcpAddr, err := net.ResolveUDPAddr("udp", led.getUrl())
 	if err != nil {
 		if lastResolvedAddr, ok := led.urlToIPmap[led.getUrl()]; !ok {
-			log.Fatalf("error: %s", err.Error())
+			log.Printf("error: %s", err.Error())
 			return
 		} else {
-			fmt.Println("cannot resolve ip address from hostname. use ip last connect.")
+			log.Println("cannot resolve ip address from hostname. use ip last connect.")
 			tcpAddr = lastResolvedAddr
 		}
 
@@ -172,7 +171,7 @@ func (led *ledGoImpl) Show() {
 
 	conn, err := net.DialUDP("udp", nil, tcpAddr)
 	if err != nil {
-		log.Fatalf("error: %s", err.Error())
+		log.Printf("error: %s", err.Error())
 		return
 	}
 	defer conn.Close()
@@ -211,14 +210,14 @@ func (led *ledCImpl) SetUrl(url string) {
 		C.SetUrl(C.CString(ipAndPort[0]))
 		port, e := strconv.ParseInt(ipAndPort[1], 10, 16)
 		if e != nil {
-			fmt.Printf("invalid port number. %s\n", ipAndPort[1])
+			log.Printf("invalid port number. %s\n", ipAndPort[1])
 			return
 		}
 		C.SetPort(C.ushort(port))
 	case len(ipAndPort) == 1:
 		C.SetUrl(C.CString(ipAndPort[0]))
 	case len(ipAndPort) == 0:
-		fmt.Printf("invalid url %s\n", url)
+		log.Printf("invalid url %s\n", url)
 		return
 	}
 

@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"flag"
-	"fmt"
 	"ledlib"
 	"ledlib/servicegateway"
 	"log"
@@ -36,9 +35,9 @@ func main() {
 		ledlib.GetLed().EnableSimulator(false)
 		ledlib.GetLed().SetUrl(*optDestination)
 	}
-	fmt.Println("udp target: " + *optDestination)
+	log.Println("udp target: " + *optDestination)
 	go func() {
-		//		fmt.Println(http.ListenAndServe("localhost:6060", nil))
+		//		log.Println(http.ListenAndServe("localhost:6060", nil))
 	}()
 
 	/*
@@ -56,9 +55,9 @@ func main() {
 	ledlib.SetUpWebAPIforCommon(renderer)
 	ledlib.SetUpWebAPIforPainting(renderer)
 
-	fmt.Println("led framework is running ...  on port 5001")
+	log.Println("led framework is running ...  on port 5001")
 	if *optStarupOrder != "" {
-		fmt.Println("[INFO]default order: " + *optStarupOrder)
+		log.Println("[INFO]default order: " + *optStarupOrder)
 		renderer.Show(*optStarupOrder)
 	}
 
@@ -70,10 +69,10 @@ func main() {
 
 		for {
 			sc := bufio.NewScanner(os.Stdin)
-			fmt.Print(">>")
+			log.Print(">>")
 			if sc.Scan() {
 				input := sc.Text()
-				fmt.Println("input:" + input)
+				log.Println("input:" + input)
 				switch {
 				case strings.HasPrefix(input, "show"):
 					renderer.Show(strings.Replace(input, "show:", "", 1))

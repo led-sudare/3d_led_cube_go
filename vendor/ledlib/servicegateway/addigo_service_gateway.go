@@ -2,8 +2,8 @@ package servicegateway
 
 import (
 	"encoding/json"
-	"fmt"
 	"ledlib/webapi"
+	"log"
 	"math/rand"
 	"strconv"
 	"sync"
@@ -124,9 +124,9 @@ func audigoServiceGatewayWorker(url string, c chan *audigoOrder, done chan struc
 			fallthrough
 		case funcIDVolume:
 			if data, e := json.Marshal(order.Data); e == nil {
-				fmt.Println(string(data))
+				log.Println(string(data))
 				if e := webapi.HttpJsonPost(url+order.GetRestUri(), data); e != nil {
-					fmt.Println(e)
+					log.Println(e)
 				}
 			}
 		case funcIDServiceGatewayAbort:

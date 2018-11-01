@@ -47,7 +47,7 @@ func (o *ObjectScrolledBitmap) Draw(cube util.Image3D) {
 		for y := 0; y < LedHeight; y++ {
 			var c util.Color32
 			if o.loop {
-				//				fmt.Printf("yOffset:%d, image height:%d, y: %d, y': %d\n", yOffset, o.image.GetHeight(), y, (y+yOffset)%o.image.GetHeight())
+				//				log.Printf("yOffset:%d, image height:%d, y: %d, y': %d\n", yOffset, o.image.GetHeight(), y, (y+yOffset)%o.image.GetHeight())
 				c = o.image.GetAt(util.AbsInt((x+xOffset)%o.image.GetWidth()),
 					util.AbsInt((y+yOffset)%o.image.GetHeight()))
 			} else {

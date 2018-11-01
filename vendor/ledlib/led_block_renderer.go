@@ -3,9 +3,9 @@ package ledlib
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"ledlib/servicegateway"
 	"ledlib/util"
+	"log"
 	"math"
 	"time"
 )
@@ -182,7 +182,7 @@ func (l *ledBockRendererImpl) Start() {
 
 			orders, err := l.waitOrdersFromChanel()
 			if err != nil {
-				fmt.Println("terminated")
+				log.Println("terminated")
 				return
 			}
 			if orders == nil {
@@ -195,7 +195,7 @@ func (l *ledBockRendererImpl) Start() {
 				start := time.Now()
 				newOrders, err := l.getOrdersFromChanel()
 				if err != nil {
-					fmt.Println("terminated")
+					log.Println("terminated")
 					return
 				}
 				if newOrders != nil {
@@ -224,7 +224,7 @@ func (l *ledBockRendererImpl) Start() {
 				waittime := math.Max(0, float64(50*time.Millisecond-duration))
 
 				/*
-					fmt.Printf("rendering: %0.2f, wait: %0.2f\n",
+					log.Printf("rendering: %0.2f, wait: %0.2f\n",
 						float64(duration)/float64(time.Millisecond),
 						float64(waittime)/float64(time.Millisecond))
 				*/
