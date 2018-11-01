@@ -138,7 +138,7 @@ func (led *ledGoImpl) SetLed(x, y, z int, rgb uint32) {
 		return
 	}
 	if z < 0 || LedDepth <= z {
-		log.FaPrintftalf("invalid z : %d\n", z)
+		log.Printf("invalid z : %d\n", z)
 		return
 	}
 
