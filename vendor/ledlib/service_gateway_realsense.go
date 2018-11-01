@@ -4,6 +4,7 @@ package ledlib
 
 import (
 	"ledlib/util"
+	"time"
 
 	zmq "github.com/zeromq/goczmq"
 )
@@ -36,6 +37,8 @@ func InitSeriveGatewayRealsense(endpoint string) {
 }
 
 func serviceGatewayRealsenseWorker(sock *zmq.Sock, c chan string, done chan struct{}) {
+	ranges := []uint32{0, 16, 32, 48, 64, 80, 96, 112}
+	timer := NewTimer(50 * time.Millisecond)
 
 	defer sock.Destroy()
 	for {
@@ -47,7 +50,9 @@ func serviceGatewayRealsenseWorker(sock *zmq.Sock, c chan string, done chan stru
 			sock.RecvFrame() // 読み捨て
 			data, _, _ := sock.RecvFrame()
 
-			ranges := []uint32{16, 32, 48, 64, 80, 96, 112, 128}
+			if !timer.IsPast() {
+				continue
+			}
 
 			EditSharedLedImage3D(realsenseSharedObjectID,
 				func(editable util.Image3D) {
@@ -62,16 +67,19 @@ func serviceGatewayRealsenseWorker(sock *zmq.Sock, c chan string, done chan stru
 							color := util.NewColorFromUint32(c)
 							depth := uint32(data[idx+3])
 
-							for z := 0; z < LedDepth; z++ {
-								if 1 < depth && depth < ranges[z] {
+							if depth == 0 {
+								continue
+							}
+							for z := LedDepth - 1; z >= 0; z-- {
+								if depth < ranges[z] {
 									editable.SetAt(x, y, z, color)
+								} else {
+									break
 								}
 							}
-
 						}
 					})
 				})
-
 		}
 	}
 }
