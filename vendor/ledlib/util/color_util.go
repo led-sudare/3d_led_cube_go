@@ -12,6 +12,24 @@ type HSV struct {
 	H, S, V float64
 }
 
+var rainbowTable []Color32
+
+func makeRainbowTable() {
+
+	rainbowTable = make([]Color32, 100)
+
+	for i := range rainbowTable {
+		rainbowTable[i] = (&HSV{float64(i) / 100, 1, 1}).RGB()
+	}
+}
+
+func GetRainbow(param float64) Color32 {
+	if rainbowTable == nil {
+		makeRainbowTable()
+	}
+	return rainbowTable[int(param*100)]
+}
+
 func (c *RGB) HSL() *HSL {
 	r := float64(c.R) / 255.0 //RGB from 0 to 255
 	g := float64(c.G) / 255.0

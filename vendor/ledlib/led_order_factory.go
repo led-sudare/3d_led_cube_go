@@ -93,6 +93,8 @@ func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{
 				return NewFilterWave(ledCanvas), 0, nil
 			case "filter-elastic":
 				return NewFilterElastic(ledCanvas), 0, nil
+			case "filter-zanzo":
+				return NewFilterZanzo(ledCanvas), 0, nil
 
 			default:
 				return nil, 0, errors.New("Unnown Object Id")

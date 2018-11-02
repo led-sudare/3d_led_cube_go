@@ -47,9 +47,7 @@ func (f *FilterExile) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 					if z >= 0 && z <= 2 {
 					} else {
 						h := (math.Sin(float64(f.timer.GetPastCount())/speed+float64(z/step)) + 1) / 2
-						hsv := &util.HSV{h, 1, 1}
-						rgb := hsv.RGB()
-						newcolor = rgb
+						newcolor = util.GetRainbow(h)
 					}
 					f.cube.SetAt(x+util.RoundToInt(sx), y+util.RoundToInt(sy), z, newcolor)
 				}

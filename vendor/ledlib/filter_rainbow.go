@@ -35,10 +35,7 @@ func (f *FilterRainbow) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 
 		rainbow := (p + float64(-x-z-y)) / rainbowGrad
 		h := (math.Sin(rainbow) + 1) / 2
-
-		hsv := &util.HSV{h, 1, 1}
-
-		f.cube.SetAt(x, y, z, hsv.RGB())
+		f.cube.SetAt(x, y, z, util.GetRainbow(h))
 
 	})
 	f.canvas.Show(f.cube, param)
