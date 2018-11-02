@@ -28,7 +28,7 @@ func NewFilterRainbow(canvas LedCanvas) LedCanvas {
 
 func (f *FilterRainbow) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 
-	f.cube = c.Copy()
+	f.cube.Clear()
 
 	p := float64(f.timer.GetPastCount()) / 10.0
 	c.ConcurrentForEach(func(x, y, z int, color util.Color32) {
