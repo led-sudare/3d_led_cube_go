@@ -51,7 +51,11 @@ func (l *Image3DImpl) Copy() Image3D {
 }
 
 func (l *Image3DImpl) Clear() {
-	l.data.Clear()
+
+	l.ForEach(func(x, y, z int, c Color32) {
+		l.SetAt(x, y, z, nil)
+	})
+
 }
 func (l *Image3DImpl) Fill(c Color32) {
 	l.data.Fill(c)
