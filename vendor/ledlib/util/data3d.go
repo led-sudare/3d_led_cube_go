@@ -64,8 +64,6 @@ func (l *Data3DImpl) SetAt(x, y, z int, c interface{}) {
 }
 
 func (l *Data3DImpl) GetAt(x, y, z int) interface{} {
-	l.mutex.Lock()
-	defer l.mutex.Unlock()
 	if l.IsInRange(x, y, z) {
 		return l.data[x+l.offsetX][y+l.offsetY][z+l.offsetZ]
 	} else {
