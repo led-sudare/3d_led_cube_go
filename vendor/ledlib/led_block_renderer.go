@@ -187,6 +187,8 @@ func (l *ledBockRendererImpl) Start() {
 			}
 			if orders == nil {
 				// order error
+				log.Println("order error")
+				servicegateway.GetAudigoSeriveGateway().Play("hazure.wav", false, false)
 				continue
 			}
 
@@ -212,7 +214,9 @@ func (l *ledBockRendererImpl) Start() {
 					time.Now().Unix() > expiresDate { // if lifetime expired
 					object, filters, lifetime, orders, param, err = GetFilterAndObject(orders, filters, param)
 					if err != nil {
+						log.Println("unknown id")
 						servicegateway.GetAudigoSeriveGateway().Stop()
+						servicegateway.GetAudigoSeriveGateway().Play("hazure.wav", false, false)
 						break
 					} else {
 						expiresDate = time.Now().Unix() + int64(lifetime)
