@@ -1,6 +1,7 @@
 package ledlib
 
 import (
+	"ledlib/servicegateway"
 	"ledlib/util"
 	"math"
 	"time"
@@ -9,20 +10,21 @@ import (
 const T = 20
 
 type FilterSkewed struct {
-	canvas LedCanvas
-	cube   util.Image3D
-	timer  Timer
-	yt     float64
-	zt     float64
-	ys     float64
-	zs     float64
-	yc     float64
-	zc     float64
+	canvas  LedCanvas
+	cube    util.Image3D
+	timer   Timer
+	yt      float64
+	zt      float64
+	ys      float64
+	zs      float64
+	yc      float64
+	zc      float64
+	preSign int
 }
 
 func NewFilterSkewed(canvas LedCanvas) LedCanvas {
 	return &FilterSkewed{canvas, NewLedImage3D(), NewTimer(50 * time.Millisecond),
-		0, 0, 0, 0, 0, 0}
+		0, 0, 0, 0, 0, 0, -1}
 }
 
 func (f *FilterSkewed) Show(c util.ImmutableImage3D, param LedCanvasParam) {
@@ -35,6 +37,12 @@ func (f *FilterSkewed) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 		f.yc = math.Cos(f.yt * 3.14 * T)
 		f.zs = math.Sin(f.zt * 3.14 * T)
 		f.zc = math.Cos(f.zt * 3.14 * T)
+
+		sign := util.GetSign(f.ys)
+		if f.preSign != sign {
+			servicegateway.GetAudigoSeriveGateway().Play("se_swing.wav", false, false)
+		}
+		f.preSign = sign
 	}
 
 	dx := float64(LedWidth / 2.0)

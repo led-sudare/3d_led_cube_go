@@ -1,6 +1,7 @@
 package ledlib
 
 import (
+	"ledlib/servicegateway"
 	"ledlib/util"
 	"math/rand"
 	"sort"
@@ -32,6 +33,7 @@ type ObjectFireworks struct {
 	ix          int
 	addTimer    Timer
 	updateTimer Timer
+	sounds      []string
 }
 
 func localNewObjectFireworks() *ObjectFireworks {
@@ -42,6 +44,7 @@ func localNewObjectFireworks() *ObjectFireworks {
 	obj.ix = 0
 	obj.addTimer = NewTimer(2500 * time.Millisecond)
 	obj.updateTimer = NewTimer(80 * time.Millisecond)
+	obj.sounds = []string{"se_fireworks.wav", "se_fireworks2.wav", "se_fireworks3.wav"}
 
 	return &obj
 }
@@ -59,6 +62,9 @@ func (b *ObjectFireworks) IsExpired() bool {
 func (b *ObjectFireworks) Draw(cube util.Image3D) {
 	mux := &sync.Mutex{}
 	if len(b.poss) < 250 {
+		sound := b.sounds[rand.Intn(len(b.sounds))]
+		servicegateway.GetAudigoSeriveGateway().Play(sound, false, false)
+
 		cx := LedWidth * rand.Float64()
 		cy := LedHeight * rand.Float64()
 		cz := LedDepth * rand.Float64()

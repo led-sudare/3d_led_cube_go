@@ -1,15 +1,17 @@
 package ledlib
 
 import (
+	"ledlib/servicegateway"
 	"ledlib/util"
 	"math"
 	"time"
 )
 
 type FilterElastic struct {
-	canvas LedCanvas
-	timer  Timer
-	cube   util.Image3D
+	canvas    LedCanvas
+	timer     Timer
+	cube      util.Image3D
+	soundSide bool
 }
 
 func NewFilterElastic(canvas LedCanvas) LedCanvas {
@@ -28,6 +30,18 @@ func (f *FilterElastic) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 	degree := float64(f.timer.GetPastCount()) * elasticSpeed
 	zoom1 := ((math.Cos(degree) + 1) / 4) + 0.7
 	zoom2 := 1 + (0.25 + 0.7) - zoom1
+
+	if f.soundSide {
+		if zoom1 > 1 {
+			f.soundSide = false
+			servicegateway.GetAudigoSeriveGateway().Play("se_zoom_extend1.wav", false, false)
+		}
+	} else {
+		if zoom2 > 1 {
+			f.soundSide = true
+			servicegateway.GetAudigoSeriveGateway().Play("se_zoom_shrink1.wav", false, false)
+		}
+	}
 
 	dx := float64(LedWidth / 2)
 	dy := float64(LedHeight)

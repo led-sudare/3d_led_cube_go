@@ -1,6 +1,7 @@
 package ledlib
 
 import (
+	"ledlib/servicegateway"
 	"ledlib/util"
 	"math"
 	"time"
@@ -17,6 +18,7 @@ func NewFilterWakame(canvas LedCanvas) LedCanvas {
 	f.canvas = canvas
 	f.timer = NewTimer(10 * time.Millisecond)
 	f.cube = NewLedImage3D()
+	servicegateway.GetAudigoSeriveGateway().Play("bgm_wave.wav", true, false)
 	return &f
 }
 
