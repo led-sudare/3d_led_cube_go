@@ -13,6 +13,7 @@ type FilterBkGrass struct {
 func NewFilterBkGrass(canvas LedCanvas) LedCanvas {
 	filter := FilterBkGrass{}
 	filter.filterObjects = NewFilterObjects(canvas)
+	filter.filterObjectsSnow = NewFilterObjects(canvas)
 
 	duration := 100 * time.Millisecond
 	filter.filterObjects.Append(NewObjectHorizontalScrolledBitmap(
@@ -45,7 +46,7 @@ func NewFilterBkGrass(canvas LedCanvas) LedCanvas {
 }
 
 func (f *FilterBkGrass) Show(c util.ImmutableImage3D, param LedCanvasParam) {
-	if param.HasEffect("filter-snows") {
+	if param.HasEffect("filter-bk-snows") {
 		f.filterObjectsSnow.Show(c, param)
 	} else {
 		f.filterObjects.Show(c, param)

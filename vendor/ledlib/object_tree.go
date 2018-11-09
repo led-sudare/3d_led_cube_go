@@ -49,9 +49,9 @@ func NewObjectTree() LedObject {
 
 func (b *ObjectTree) GetImage3D(param LedCanvasParam) util.ImmutableImage3D {
 	switch {
-	case param.HasEffect("filter-snow"):
+	case param.HasEffect("filter-bk-snows"):
 		return b.winter
-	case param.HasEffect("filter-sakura"):
+	case param.HasEffect("filter-bk-sakura"):
 		return b.spring
 	default:
 		return b.summer
