@@ -1,7 +1,6 @@
 package ledlib
 
 import (
-	"ledlib/servicegateway"
 	"ledlib/util"
 	"time"
 )
@@ -17,8 +16,6 @@ func NewFilterBkSnowsLow(canvas LedCanvas) LedCanvas {
 		"/asset/image/snow/snow1.png", 3, 100*time.Millisecond, true))
 	filter.filterObjects.Append(NewObjectVerticalScrolledBitmap(
 		"/asset/image/snow/snow2.png", 7, 150*time.Millisecond, true))
-
-	servicegateway.GetAudigoSeriveGateway().Play("se_rain.wav", true, false)
 
 	return &filter
 }

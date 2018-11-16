@@ -214,9 +214,11 @@ func (l *ledBockRendererImpl) Start() {
 					time.Now().Unix() > expiresDate { // if lifetime expired
 					object, filters, lifetime, orders, param, err = GetFilterAndObject(orders, filters, param)
 					if err != nil {
-						log.Println("unknown id")
 						servicegateway.GetAudigoSeriveGateway().Stop()
-						servicegateway.GetAudigoSeriveGateway().Play("hazure.wav", false, false)
+						if _, ok := err.(ErrorNoObject); !ok {
+							log.Println("unknown id")
+							servicegateway.GetAudigoSeriveGateway().Play("hazure.wav", false, false)
+						}
 						break
 					} else {
 						expiresDate = time.Now().Unix() + int64(lifetime)
@@ -250,8 +252,8 @@ func GetFilterAndObject(iOrders []interface{}, canvas LedCanvas, param LedCanvas
 	jsonOrders := iOrders
 	for {
 		if len(jsonOrders) == 0 {
-			// invalid order
-			return nil, nil, 0, iOrders, param, errors.New("invalid order format")
+			// no object
+			return nil, nil, 0, iOrders, param, ErrorNoObject{}
 		}
 		rawOrder := jsonOrders[0]
 		jsonOrders = jsonOrders[1:]

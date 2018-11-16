@@ -10,7 +10,7 @@ import (
 func CreateObject(order map[string]interface{}, ledCanvas LedCanvas) (interface{}, float64, error) {
 
 	value, err := GetJSONValue(order, "id")
-	ilifetime, _ := GetJSONValueOrDefault(order, "lifetime", float64(20.0))
+	ilifetime, _ := GetJSONValueOrDefault(order, "lifetime", float64(16.0))
 	if err != nil {
 		return nil, 0, err
 	}
