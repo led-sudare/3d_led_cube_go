@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"image"
+	"image/color"
 	"ledlib/util"
 	"net/http"
 	"strconv"
@@ -88,20 +90,24 @@ func UpdatePartOfPaintingSharedObject(data []byte) error {
 
 func UpdateAllPaintingSharedObject(data []byte) error {
 	var ledData LedAllPaintingData
+	imgForLog := image.NewRGBA(image.Rect(0, 0, LedWidth, LedHeight))
 	if err := json.Unmarshal(data, &ledData); err == nil {
 		EditSharedLedImage3D(paintingSharedObjectID,
 			func(editable util.Image3D) {
 				for x := 0; x < LedWidth; x++ {
 					for y := 0; y < LedHeight; y++ {
 						d := ledData.Led[x][y]
-						if c, err := strconv.ParseUint(d, 16, 32); err == nil {
-							color := util.NewColorFromUint32(uint32(c))
-							editable.SetAt(x, y, 0, color)
-							editable.SetAt(x, y, 0, color)
+						if i, err := strconv.ParseUint(d, 16, 32); err == nil {
+							c := util.NewColorFromUint32(uint32(i))
+							editable.SetAt(x, y, 0, c)
+							editable.SetAt(x, y, 0, c)
+							r, g, b := util.ToUint8s(uint32(i))
+							imgForLog.Set(x, y, color.RGBA{r, g, b, 0xff})
 						}
 					}
 				}
 			})
+		util.WriteImageToLog(imgForLog)
 		return nil
 	} else {
 		return err

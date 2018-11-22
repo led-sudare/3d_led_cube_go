@@ -143,6 +143,7 @@ func (l *ledBockRendererImpl) getOrdersFromString(t string) []interface{} {
 	} else if flattenOrders, err := flattenOrders(arrayOrders); err != nil {
 		return nil
 	} else {
+		util.WriteOrderToLog(t)
 		return flattenOrders
 	}
 }
