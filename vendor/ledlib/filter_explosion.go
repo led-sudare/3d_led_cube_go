@@ -77,7 +77,7 @@ func (f *FilterExplosion) Show(c util.ImmutableImage3D, param LedCanvasParam) {
 		sign := util.GetSign(f.sin)
 
 		if f.preSign < 0 && sign > 0 {
-			servicegateway.GetAudigoSeriveGateway().Play("se_explosion.wav", true, false)
+			servicegateway.GetAudigoSeriveGateway().Play("se_explosion.wav", false, false)
 		}
 		f.preSign = sign
 		//		f.add = (f.add + 1)
