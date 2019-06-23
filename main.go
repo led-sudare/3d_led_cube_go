@@ -3,8 +3,8 @@ package main
 import (
 	"bufio"
 	"flag"
-	"ledlib"
-	"ledlib/servicegateway"
+	"3d_led_cube_go/ledlib"
+	"3d_led_cube_go/ledlib/servicegateway"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
