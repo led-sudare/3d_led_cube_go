@@ -25,8 +25,9 @@ Referenced from: https://golang.org/doc/install
 add belows to end of ~/.bash_profile
 ```shell
 ....
-export "GOPATH=$HOME/go"
-export "PATH=$PATH:$GOPATH/bin"
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+export GO111MODULE=on
 ```
 
 then, apply these settings.
@@ -35,15 +36,7 @@ source ~/.bash_profile
 ```
 
 
-## 3. Run "go get"s
-
-```shell
-go get gonum.org/v1/gonum/mat
-go get github.com/jessevdk/go-assets-builder
-go get github.com/stretchr/testify
-```
-
-## 4. Clone The Code
+## 3. Clone The Code
 
 Get the code
 ```shell
@@ -53,7 +46,7 @@ git clone https://github.com/YGFYHD2018/3d_led_cube_go.git
 cd 3d_led_cube_go
 ```
 
-## 5. Build And Run The Program
+## 4. Build And Run The Program
 
 ```shell
 go run main.go
