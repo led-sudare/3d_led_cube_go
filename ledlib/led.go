@@ -9,6 +9,8 @@ package ledlib
 import (
 	"log"
 	"net"
+
+	zmq "github.com/zeromq/goczmq"
 )
 
 const LedWidth = 16
@@ -110,6 +112,7 @@ type ledGoImpl struct {
 	led565Buffer []byte
 	sem          chan struct{}
 	urlToIPmap   map[string]*net.UDPAddr
+	zmqPubSock   *zmq.Sock
 }
 
 func newGoLed() *ledGoImpl {
@@ -123,6 +126,13 @@ func newGoLed() *ledGoImpl {
 
 func (led *ledGoImpl) SetUrl(url string) {
 	led.ledUrl = url
+	endpoint := "tcp://" + url
+	led.zmqPubSock = zmq.NewSock(zmq.Pub)
+	err := led.zmqPubSock.Connect(endpoint)
+	if err != nil {
+		panic(err)
+	}
+
 }
 func (led *ledGoImpl) GetUrl() string {
 	return led.ledUrl
@@ -169,13 +179,12 @@ func (led *ledGoImpl) Show() {
 	}
 	led.urlToIPmap[led.getUrl()] = tcpAddr
 
-	conn, err := net.DialUDP("udp", nil, tcpAddr)
-	if err != nil {
-		log.Printf("error: %s", err.Error())
-		return
+	// ZMQ Endpoint
+	if led.zmqPubSock != nil {
+		led.zmqPubSock.SendFrame(led.led565Buffer, zmq.FlagNone)
+	} else {
+		log.Println("Warning.. zmqPubSock is not initialized.")
 	}
-	defer conn.Close()
-	conn.Write(led.led565Buffer)
 }
 
 func (led *ledGoImpl) Enable(enable bool) {
